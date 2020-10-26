@@ -15,6 +15,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { PreferencesComponent } from '../preferences/preferences.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
+// comentario prueba ctualización github
 
 
 
