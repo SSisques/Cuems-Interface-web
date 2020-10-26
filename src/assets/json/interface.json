@@ -1,0 +1,141 @@
+{
+    "py/object": "CueList.CueList",
+    "py/seq": [{
+            "py/object": "Cue.Cue",
+            "time": {
+                "py/object": "CTimecode.CTimecode",
+                "drop_frame": false,
+                "ms_frame": false,
+                "fraction_frame": false,
+                "_int_framerate": 25,
+                "_framerate": "25",
+                "frames": 826
+            },
+            "type": "virtual",
+            "loop": "False",
+            "dict": {}
+        },
+        {
+            "py/object": "Cue.Cue",
+            "time": null,
+            "type": "floating",
+            "loop": "False",
+            "dict": {}
+        },
+        {
+            "py/object": "Cue.Cue",
+            "time": {
+                "py/object": "CTimecode.CTimecode",
+                "drop_frame": false,
+                "ms_frame": false,
+                "fraction_frame": false,
+                "_int_framerate": 25,
+                "_framerate": "25",
+                "frames": 126
+            },
+            "type": "virtual",
+            "loop": "False",
+            "dict": {}
+        },
+        {
+            "py/object": "AudioCue.AudioCue",
+            "time": {
+                "py/object": "CTimecode.CTimecode",
+                "drop_frame": false,
+                "ms_frame": false,
+                "fraction_frame": false,
+                "_int_framerate": 25,
+                "_framerate": "25",
+                "frames": 1126
+            },
+            "type": "virtual",
+            "loop": "False",
+            "dict": {}
+        },
+        {
+            "py/object": "DmxCue.DmxCue",
+            "time": {
+                "py/object": "CTimecode.CTimecode",
+                "drop_frame": false,
+                "ms_frame": false,
+                "fraction_frame": false,
+                "_int_framerate": 25,
+                "_framerate": "25",
+                "frames": 576
+            },
+            "dmx_scene": {
+                "0": {
+                    "0": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 10
+                        }
+                    },
+                    "1": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 50
+                        }
+                    },
+                    "py/object": "DmxCue.DmxUniverse",
+                    "dict": {}
+                },
+                "1": {
+                    "20": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 23
+                        }
+                    },
+                    "21": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 255
+                        }
+                    },
+                    "py/object": "DmxCue.DmxUniverse",
+                    "dict": {}
+                },
+                "2": {
+                    "5": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 10
+                        }
+                    },
+                    "6": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 23
+                        }
+                    },
+                    "7": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 125
+                        }
+                    },
+                    "8": {
+                        "py/object": "DmxCue.DmxChannel",
+                        "_value": {
+                            "py/object": "DmxCue.DmxChannel",
+                            "_value": 200
+                        }
+                    },
+                    "py/object": "DmxCue.DmxUniverse",
+                    "dict": {}
+                },
+                "py/object": "DmxCue.DmxScene",
+                "dict": {}
+            },
+            "dict": {}
+        }
+    ]
+}

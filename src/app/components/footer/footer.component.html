@@ -1,0 +1,15 @@
+<footer class="p-2 bg-dark text-white pull-right">
+    <div class="row">
+        <div class="col-5">CueMs V0.0.1.6 by
+            <a href="https://github.com/stagesoft ">StageSoft</a>
+        </div>
+        <div class="col text-right">
+            <span>
+                Estado de la conexión webSocket:
+            <span *ngIf="wsService.isConnected" class="text-success">Online</span>
+            <span *ngIf="!wsService.isConnected" class="text-danger">Offline</span> Users
+            <span class="text-success">{{ this.users }}</span>
+            </span>
+        </div>
+    </div>
+</footer>

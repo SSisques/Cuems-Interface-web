@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{inData.name}}</h1>
+<div mat-dialog-content>
+    <p>{{inData.msg}}</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="close()">Cancelar</button>
+    <button mat-button (click)="confirm()" cdkFocusInitial>Adelante</button>
+</div>

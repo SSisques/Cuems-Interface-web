@@ -1,0 +1,76 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Editando Cue {{editForm.value.name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
+    <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Básico">
+            <div class="p-4">
+
+
+                <mat-dialog-content>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cue name</mat-label>
+                        <input matInput formControlName="name" (keyup)="handleKeyUp($event)">
+                    </mat-form-field>
+                    &nbsp;
+                    <mat-form-field appearance="outline">
+                        <mat-label>Prewait</mat-label>
+                        <input matInput formControlName="prewait" (keyup)="handleKeyUp($event)">
+                    </mat-form-field>
+                    &nbsp;
+                    <mat-form-field appearance="outline">
+                        <mat-label>Postwait</mat-label>
+                        <input matInput formControlName="postwait" (keyup)="handleKeyUp($event)">
+                    </mat-form-field>
+                    <br>
+
+                    <mat-radio-group formControlName="loop" [(ngModel)]="loop">
+                        <mat-radio-button class="example-margin" value="cero" (click)="loopChange('inf')">Inifinite loop</mat-radio-button>
+                        <mat-radio-button class="example-margin" value="uno" (click)="loopChange('loop')">Loop times</mat-radio-button>
+                    </mat-radio-group>
+                    &nbsp;
+                    <mat-form-field appearance="outline ">
+                        <mat-label>Loop times</mat-label>
+                        <input matInput formControlName="loop_times" (keyup)="handleKeyUp($event)">
+                    </mat-form-field>
+
+
+
+                    <br>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Post_go</mat-label>
+                        <mat-select formControlName="post_go">
+                            <mat-option value="pause">Select next cue and ready</mat-option>
+                            <mat-option value="go">Go this cue and next cue</mat-option>
+                            <mat-option value="go_at_end">Go next cue at end of this cue</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                </mat-dialog-content>
+            </div>
+        </mat-tab>
+        <mat-tab label="Media" *ngIf="mediaContent">
+            {{ mediaContent }}
+            <mat-form-field appearance="fill">
+                <mat-label>Selector de media</mat-label>
+                <mat-select formControlName="media">
+                    <mat-option *ngFor="let files of mediaList" [value]="files.unix_name">{{ files.unix_name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </mat-tab>
+        <mat-tab label="Third">
+            <pre>{{ editForm.value | json }}</pre>
+        </mat-tab>
+    </mat-tab-group>
+</form>
+
+
+<mat-card-actions>
+    <button mat-raised-button type="button" color="primary" (click)="save()">Save/Close</button>
+</mat-card-actions>

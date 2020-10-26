@@ -1,0 +1,37 @@
+{
+    "node": [{
+        "@id": 0,
+        "osc_dest_host": "localhost",
+        "osc_in_port": 7700,
+        "osc_out_port": 7701,
+        "videoplayer": {
+            "path": "/usr/bin/xjadeo",
+            "outputs": 2,
+            "instance": [{
+                    "@id": 0,
+                    "osc_in_port": 7710
+                },
+                {
+                    "@id": 1,
+                    "osc_in_port": 7720
+                }
+            ]
+        },
+        "audioplayer": {
+            "path": "/usr/bin/audioplayer",
+            "audio_cards": 1,
+            "instance": [{
+                "@id": 0,
+                "osc_in_port": 7730
+            }]
+        },
+        "dmxplayer": {
+            "path": "/path/to",
+            "universes": 1,
+            "instance": [{
+                "@id": 0,
+                "osc_in_port": 7740
+            }]
+        }
+    }]
+}

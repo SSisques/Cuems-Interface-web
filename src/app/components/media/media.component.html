@@ -1,0 +1,113 @@
+<mat-progress-bar mode="indeterminate" *ngIf="cargado === false"></mat-progress-bar>
+<div class="container h-100 main-container animated fadeIn fast">
+
+    <!-- si cangando es false - no nos ha respondido el servidor -->
+    <div *ngIf="cargado == false; else list">
+        Cargado ...
+    </div>
+    <!-- si cargando es true y el tenemos los datos cargamos el formulario -->
+    <ng-template #list>
+
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Listado de archivos">
+
+                <!-- Listado de archvivos -->
+                <!-- Listado archivos en la papelera -->
+
+                <div class="row text-right">
+                    <div class="col">
+                        <button mat-button (click)="selectAll()">SelectAll</button>
+                        <button mat-button (click)="deselectAll()">DeselectAll</button>
+                        <button mat-button (click)="deleteSelected()">Borrar</button>
+                    </div>
+                </div>
+
+                <mat-selection-list #fileList [(ngModel)]="selected">
+                    <mat-list-option *ngFor="let file of filesList" [value]="file.uuid">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <span matLine>
+                            {{file.unix_name}}
+                        </span>
+                        <span matLine>
+                            Used in {{file.in_projects}} active projects and {{file.in_trash_projects}} trash projects.
+                        </span>
+                    </mat-list-option>
+                </mat-selection-list>
+
+            </mat-tab>
+            <mat-tab label="Subida de archivos">
+
+                <div class="row m-3">
+                    <div class="col-md-4">
+
+                        <div appNgDropFiles [archivos]="archivosComponent" (mouseSobre)="estaSobreElemento = $event" [ngClass]="{ 'file-over': estaSobreElemento }" class="well drop-zone">
+                            <h4>Arrastre aquí los archivos</h4>
+                            <img src="assets/img/drop-images.png">
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+
+                        <button mat-button (click)="cargarArchivos()" [disabled]="archivosComponent.length === 0">Cargar archivos</button>
+                        <button mat-button (click)="limpiarArchivos()">Limpiar listado</button>
+                        <!-- <button (click)="nuevoArchivo()" class="btn btn-danger">TMP</button> -->
+
+
+
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nombre archivo</th>
+                                    <th>Tamaño</th>
+                                    <th>Progreso</th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let archivo of archivosComponent">
+                                    <td>{{ archivo.nombreArchivo }}</td>
+                                    <td>{{ archivo.file.size / 1024 /1024 | number: '.2-2' }} MB</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': archivo.progreso + '%' }"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </mat-tab>
+            <mat-tab label="Papelera">
+
+                <!-- Listado archivos en la papelera -->
+
+                <div class="row text-right">
+                    <div class="col">
+                        <button mat-button (click)="selectAllTrash()">SelectAll</button>
+                        <button mat-button (click)="deselectAllTrash()">DeselectAll</button>
+                        <button mat-button (click)="restoreSelected()">Recuperar</button>
+                        <button mat-button (click)="deleteSelected('trash')">Borrar definitivamente</button>
+                    </div>
+                </div>
+
+                <mat-selection-list #fileTrashList [(ngModel)]="selected">
+                    <mat-list-option *ngFor="let file of filesTrashList" [value]="file.uuid">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <span matLine>
+                            {{file.unix_name}}
+                        </span>
+                        <span matLine>
+                            Used in {{file.in_projects}} active projects and {{file.in_trash_projects}} trash projects.
+                        </span>
+                    </mat-list-option>
+                </mat-selection-list>
+
+            </mat-tab>
+
+        </mat-tab-group>
+    </ng-template>
+
+</div>

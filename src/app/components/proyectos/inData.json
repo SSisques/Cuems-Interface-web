@@ -1,0 +1,39 @@
+[{
+        "type": "users",
+        "count": 1
+    },
+    {
+        "type": "counter",
+        "value": 4
+    },
+    {
+        "type": "list",
+        "value": [{
+                "e05de59a-b281-4abf-83ba-97198d661a63": {
+                    "name": "Segundo proyecto",
+                    "date": "13/08/2020 07:23:12"
+                }
+            },
+            {
+                "2c2d5960-ee08-11ea-b01f-0f775b1132e7": {
+                    "name": "Ingrese un nombre...",
+                    "date": "03/09/2020 19:09:05"
+                }
+            },
+            {
+                "a6add900-ee10-11ea-b8a3-ef423dc30c39": {
+                    "name": "Ingrese un nombre...",
+                    "date": "03/09/2020 20:09:47"
+                }
+            }
+        ]
+    },
+    {
+        "type": "project",
+        "value": "{\"CuemsScript\":x {\"uuid\": \"a6add900-ee10-11ea-b8a3-ef423dc30c39\", \"name\": \"Ingrese un nombre...\", \"date\": \"03/09/2020 20:09:47\"}}"
+    },
+    {
+        "type": "state",
+        "value": "project loaded"
+    }
+]

@@ -1,0 +1,115 @@
+<!-- <div class="card fadeIn slow">
+    <div class="card-body">
+        <span class="text-info">Proyectos:</span> Página listado de proyectos.
+    </div>
+</div> -->
+
+
+<mat-progress-bar mode="indeterminate" *ngIf="cargado === false"></mat-progress-bar>
+<div class="container h-100 main-container animated fadeIn fast">
+
+
+    <!-- Menú -->
+    <div class="row justify-content-around">
+        <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
+        <div class="col-12 m-1 p-2 border bg-light text-left">
+            <button mat-button title="Crear proyecto nuevo" (click)="newProjectDialog()">{{ 'new.project' | translate }}</button>
+        </div>
+    </div>
+    <!-- Listado proyectos -->
+    <div class="row justify-content-around h-50">
+        <div class="col-12 m-1 p-2 border bg-aqua">
+            <!-- si cangando es false - no nos ha respondido el servidor -->
+            <div *ngIf="cargado == false; else list">
+                Cargado ...
+            </div>
+            <!-- si cargando es true y el tenemos los datos cargamos el formulario -->
+            <ng-template #list>
+
+                <mat-tab-group mat-align-tabs="start">
+                    <mat-tab label="{{ 'poject.list' | translate }}">
+
+                        <mat-list *ngFor="let proyecto of listaProyectos; let i = index">
+                            <mat-list-item>
+
+                                <div class="col-6 with-icon">
+
+                                    <mat-icon mat-list-icon>folder</mat-icon>
+                                    {{proyecto.name}}
+
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button mat-button (click)=" editarProyecto(this.listaProyectos[i].uuid)">Editar</button>
+                                    <button mat-button (click)=" showProyecto(this.listaProyectos[i].uuid)">Show</button>
+                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                        <mat-icon>more_vert</mat-icon>
+                                      </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="confirmDialog(i,this.listaProyectos[i].uuid)">
+                                          <mat-icon>delete</mat-icon>
+                                          <span>Delete</span>
+                                        </button>
+                                        <button mat-menu-item (click)="duplicateProject(this.listaProyectos[i].uuid)">
+                                          <mat-icon>create_new_folder</mat-icon>
+                                          <span>Duplicate</span>
+                                        </button>
+                                        <button mat-menu-item (click)="forceClosedProject()">
+                                            <mat-icon>close</mat-icon>
+                                            <span>Force closed</span>
+                                          </button>
+                                    </mat-menu>
+
+                                    <!-- <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" title="Borrar proyecto" (click)="confirmDialog(i,this.listaProyectos[i].uuid)">
+
+                                        
+                                      </button> -->
+                                </div>
+
+
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                        </mat-list>
+
+                    </mat-tab>
+                    <mat-tab label="Papelera">
+
+                        <!-- Listado proyectos en la papelera -->
+
+                        <div class="row text-right">
+                            <div class="col">
+                                <button mat-button (click)="selectAllTrash()">SelectAll</button>
+                                <button mat-button (click)="deselectAllTrash()">DeselectAll</button>
+                                <button mat-button (click)="restoreSelected()">Recuperar</button>
+                                <button mat-button (click)="deleteSelected('trash')">Borrar definitivamente</button>
+                            </div>
+                        </div>
+
+                        <mat-selection-list #projectsTrashList [(ngModel)]="selected">
+                            <mat-list-option *ngFor="let project of projectTrashList" [value]="project.uuid">
+                                <mat-icon mat-list-icon>folder</mat-icon>
+                                {{project.name}}
+                            </mat-list-option>
+                        </mat-selection-list>
+
+                    </mat-tab>
+
+                </mat-tab-group>
+            </ng-template>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- <div *ngFor="let list of wsService.inData">
+                    <div *ngIf="list.type === 'list'">
+                        <ul *ngFor="let proyecto of list.value">
+                            <li class="list-group-item" *ngFor="let item of proyecto | keyvalue">
+                                <h5>{{ item.value.name }}</h5>
+                                <p>{{ item.value.date }}</p>
+                                <p>{{ item.key }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div> -->

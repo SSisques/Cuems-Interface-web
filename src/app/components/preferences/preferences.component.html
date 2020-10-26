@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>
+    Preferencias del proyecto {{editForm.value.name}}</h1>
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="Básico">
+        <div class="p-4">
+            <form autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
+
+                <mat-dialog-content>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput formControlName="name" (keyup)="handleKeyUp($event)">
+                    </mat-form-field>
+                    &nbsp;
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Descripción</mat-label>
+                        <input matInput formControlName="description" #message maxlength="256" placeholder="Una descripción interesante ..." (keyup)="handleKeyUp($event)">
+                        <mat-hint align=" end ">{{message.value.length}} / 256</mat-hint>
+                    </mat-form-field>
+
+
+
+                </mat-dialog-content>
+
+            </form>
+        </div>
+    </mat-tab>
+    <mat-tab label="Second">
+        <div class="p-4 ">
+            <pre>{{ editForm.value | json }}</pre>
+        </div>
+    </mat-tab>
+    <mat-tab label="Third"> Content 3 </mat-tab>
+</mat-tab-group>
+<mat-card-actions>
+    <button mat-raised-button type="button" color="primary" (click)="save()">Save/Close</button>
+</mat-card-actions>

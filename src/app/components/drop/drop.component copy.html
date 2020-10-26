@@ -1,0 +1,41 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" cdkDropList (cdkDropListDropped)="drop($event)">
+    <mat-tree-node class="block" *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding cdkDrag [cdkDragData]="node" (mouseenter)="dragHover(node)" (mouseleave)="dragHoverEnd()" (cdkDragStarted)="dragStart()" (cdkDragReleased)="dragEnd()">
+        <button mat-icon-button disabled></button>
+        <mat-card>{{node.id}} Cues {{node.id}} {{node.filename}} : {{node.type}}</mat-card>
+
+    </mat-tree-node>
+
+    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding cdkDrag [cdkDragData]="node" (mouseenter)="dragHover(node)" (mouseleave)="dragHoverEnd()" (cdkDragStarted)="dragStart()" (cdkDragReleased)="dragEnd()">
+
+
+        <div class="d-flex bd-highlight border">
+            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+
+            <div class="p-.5 flex-grow-1 bd-highlight">
+                <span class="badge badge-primary badge-pill ">{{node.id}}</span> {{ node.filename }}
+            </div>
+            <div class="p-.5 px-1 bd-highlight border-right">00:00:00</div>
+            <div class="p-.5 px-1 bd-highlight border-right">Duration</div>
+            <div class="p-.5 px-1 bd-highlight">00:00:00</div>
+            <div class="bd-highlight">
+
+
+
+                <svg class="bi" width="20 " height="20 " fill="currentColor">
+            <use xlink:href="assets/bootstrap-icons.svg#continueIcon"/>
+            <use xlink:href="assets/bootstrap-icons.svg#arrow-down-circle-fill"/>
+        </svg>
+
+
+                <!-- arrow-down-circle arrow-down-circle-fill -->
+            </div>
+        </div>
+
+    </mat-tree-node>
+</mat-tree>
+
+<!-- <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> -->

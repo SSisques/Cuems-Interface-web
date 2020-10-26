@@ -1,0 +1,42 @@
+<div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action" (click)="selectCue(idx)">
+
+        <li class="list-group-item">
+            <div class="d-flex bd-highlight">
+                <div class="p-.5 flex-grow-1 bd-highlight">
+                    <span class="badge badge-primary badge-pill">{{ idx }}</span> Nombre de la cue.
+                </div>
+                <div class="p-.5 px-1 bd-highlight border-right">00:00:00</div>
+                <div class="p-.5 px-1 bd-highlight border-right">Duration</div>
+                <div class="p-.5 px-1 bd-highlight">00:00:00</div>
+                <div class="bd-highlight">
+                    <button class="btn btn-danger" type="button" title="Borrar Cue">
+                        <svg class="bi" width="20" height="20" fill="currentColor">
+                    <use xlink:href="assets/bootstrap-icons.svg#trash-fill"/>
+                  </svg>
+                    </button>
+</div>
+</div>
+</li>
+
+</button>
+</div>
+
+<!-- <li class="list-group-item">
+    <div class="d-flex bd-highlight">
+        <div class="p-.5 flex-grow-1 bd-highlight">
+            <span class="badge badge-primary badge-pill">{{ idx }}</span>
+            <span class="badge badge-primary badge-pill">{{ cue.uuid }}</span> &nbsp; {{ cue.time.CTimecode }}
+        </div>
+        <div class="p-.5 px-1 bd-highlight border-right">00:00:00</div>
+        <div class="p-.5 px-1 bd-highlight border-right">Duration</div>
+        <div class="p-.5 px-1 bd-highlight">00:00:00</div>
+        <div class="bd-highlight">
+            <button class="btn btn-danger" type="button" title="Borrar Cue" (click)="deleteCue(cue.uuid)">
+                <svg class="bi" width="20" height="20" fill="currentColor">
+            <use xlink:href="assets/bootstrap-icons.svg#trash-fill"/>
+          </svg>
+            </button>
+        </div>
+    </div>
+</li> -->
