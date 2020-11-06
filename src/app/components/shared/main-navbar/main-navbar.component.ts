@@ -15,6 +15,7 @@ export class MainNavbarComponent implements AfterViewInit {
 
   edit = {
     editing: false,
+    // edited: false,
     uuid: '',
     name: '',
     mode: true, // true que será edit y false show
@@ -52,7 +53,7 @@ export class MainNavbarComponent implements AfterViewInit {
     this.proService.editingProject.subscribe( // escuchamos el obsevable editinsProject
       msg => {
            this.edit = msg;
-          //  console.log(msg);
+          //  console.log(this.edit.edited);
            if (this.name !== this.edit.name) {
             setTimeout(() => { this.name = this.edit.name; }, 500);
             // console.log(this.name);
@@ -82,6 +83,7 @@ export class MainNavbarComponent implements AfterViewInit {
     } else if (!this.edit.mode) {
       modeText = 'edit';
     }
+    // this.proService.changeEditing(this.edit);
     this.router.navigate( ['/cuelist', this.edit.uuid, modeText] );
   }
 

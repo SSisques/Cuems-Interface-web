@@ -34,7 +34,7 @@ export class NewProjectComponent implements OnInit {
     this.editForm = this.fb.group({  // group es un objeto de javascript literal
       name : [data.name, [Validators.required, Validators.minLength(3), Validators.maxLength(60), this.noDuplicated.bind(this)]],
       unix_name: [data.unix_name, [Validators.required, Validators.minLength(3), Validators.maxLength(60), Validators.pattern('[a-z0-9_]{3,236}')]],
-      about: [data.about, Validators.maxLength(255)]
+      description: [data.description, Validators.maxLength(255)]
     });
   }
 
@@ -87,10 +87,10 @@ export class NewProjectComponent implements OnInit {
     }
 
   }
-  getAboutErrorMessage(): string { // errores a mostrar en la validación del nombre
+  getDescriptionErrorMessage(): string { // errores a mostrar en la validación del nombre
 
-    if (this.editForm.controls.about.hasError('maxlength')) {
-      return this.translate.instant('new.project.about.error.maxlength');
+    if (this.editForm.controls.description.hasError('maxlength')) {
+      return this.translate.instant('new.project.description.error.maxlength');
     }
 
   }

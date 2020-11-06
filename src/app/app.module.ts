@@ -127,7 +127,7 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     AlertModule,
     BrowserAnimationsModule,
     KeyboardShortcutsModule.forRoot(),
-    
+
     MatDialogModule, MatTabsModule, MatCardModule, MatButtonModule, MatProgressBarModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatCheckboxModule, MatTreeModule,
     MatIconModule, MatListModule, MatDividerModule, MatMenuModule, MatTooltipModule,

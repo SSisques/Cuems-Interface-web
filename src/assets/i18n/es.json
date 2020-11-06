@@ -18,8 +18,9 @@
     "new.project.unix_name.error.minlength": "Mínimo 3 carácteres",
     "new.project.unix_name.error.maxlength": "Máximo 60 carácteres",
     "new.project.unix_name.error.pattern": "Solo adminitido a-z 0-9 y _",
-    "new.project.about": "Descripción",
-    "new.project.about.placeholder": "Una breve descripción ...",
+    "new.project.description": "Descripción",
+    "new.project.description.placeholder": "Una breve descripción ...",
+    "new.project.description.error.maxlength": "Máximo 256 carácteres",
     "new.project.confirm": "Crear",
     "new.project.cancel": "Cancelar"
 }

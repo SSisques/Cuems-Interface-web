@@ -27,11 +27,13 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "@popperjs/core": "^2.4.4",
     "@types/jquery": "^3.5.0",
+    "@types/js-cookie": "^2.2.6",
     "bootstrap": "^4.5.0",
     "bootstrap-icons": "^1.0.0-alpha5",
     "crypto-js": "^4.0.0",
     "jquery": "^3.5.1",
     "jquery.js": "0.0.2-security",
+    "js-cookie": "^2.2.1",
     "ng-keyboard-shortcuts": "^10.1.16",
     "osc-js": "^2.1.0",
     "popper": "^1.0.1",
@@ -42,7 +44,7 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1000.2",
+    "@angular-devkit/build-angular": "^0.1002.0",
     "@angular/cli": "~10.0.2",
     "@angular/compiler-cli": "^10.0.14",
     "@types/jasmine": "~3.5.0",

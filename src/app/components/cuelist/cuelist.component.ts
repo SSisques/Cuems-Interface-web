@@ -14,6 +14,7 @@ import { EditCueComponent } from '../edit-cue/edit-cue.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { PreferencesComponent } from '../preferences/preferences.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+// import * as Cookies from 'js-cookie'; // https://github.com/js-cookie/js-cookie
 
 
 @Component({
@@ -44,12 +45,15 @@ export class CueListComponent implements OnInit, AfterViewInit {
                     this.initMode(params.mode); // recogemos el modo de la url
                   });
                   this.fileService.files_List(); // llamamos a la listado multimedia
+                  this.recibimosEdit(); // recivimos datos del servicio proyectos comunicación con navbar
+
                   this.recibimosWs(); // recibimos la respuesta del servidor
                 }
 
   // objeto que compartimos con el navbar
   edit = {
-    editing: true,
+    editing: true, // true cuando lo hallan editado
+    // edited: false,
     uuid: '',
     name: '',
     mode: true, // true que será show y false edit
@@ -81,17 +85,17 @@ export class CueListComponent implements OnInit, AfterViewInit {
 
  public cueMs: CuemsScript = { // extraemos cuemsscript del proyecto para usarlo
   uuid: '',
+  unix_name: '',
   name: '',
   description: '',
   created: '', // aplicar la zona horaria
   modified: '',
-  cuelist: {
-    common_properties: {
+  CueList: {
       uuid: '',
       id: '',
       name: '',
       description: '',
-      disabled: false,
+      enabled: true,
       loaded: false, // * cue cargada y ready
       timecode: false, // *
       offset: '', // * Si timecode es true tiene un offset
@@ -100,20 +104,52 @@ export class CueListComponent implements OnInit, AfterViewInit {
       postwait: '',
       post_go: '', // pause , go, go_at_end
       target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-      ui_properties: {
+      UI_properties: {
         timeline_position: {
           x: 0,
           y: 0
         }
-      }
-    },
+      },
     contents: []
     }
  }; // objeto del contenido del proyecto
 
+ public cueMsCookie: CuemsScript = { // extraemos cuemsscript del proyecto para usarlo
+  uuid: '',
+  unix_name: '',
+  name: '',
+  description: '',
+  created: '', // aplicar la zona horaria
+  modified: '',
+  CueList: {
+      uuid: '',
+      id: '',
+      name: '',
+      description: '',
+      enabled: true,
+      loaded: false, // * cue cargada y ready
+      timecode: false, // *
+      offset: '', // * Si timecode es true tiene un offset
+      loop: 0, // -1 infinito, 0 desactivado o número de loops
+      prewait: '',
+      postwait: '',
+      post_go: '', // pause , go, go_at_end
+      target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
+      UI_properties: {
+        timeline_position: {
+          x: 0,
+          y: 0
+        }
+      },
+    contents: []
+    }
+ };
+
  contents: Contents[] = [];
 
  tipoCue: string[] = []; // el tipo de las cues por id
+
+
 
  forma: FormGroup; // creamos formulario para la parte de cuelist
 
@@ -134,10 +170,10 @@ export class CueListComponent implements OnInit, AfterViewInit {
   let x: number;
   const eVent: number = Math.sign(event.distance.x);
   if (eVent === 1 ) {
-    this.contents[i][this.tipoCue[i]].common_properties.ui_properties.timeline_position.x += event.distance.x;
+    this.contents[i][this.tipoCue[i]].UI_properties.timeline_position.x += event.distance.x;
   } else if (eVent === -1){
     x = - event.distance.x;
-    this.contents[i][this.tipoCue[i]].common_properties.ui_properties.timeline_position.x -= x;
+    this.contents[i][this.tipoCue[i]].UI_properties.timeline_position.x -= x;
   }
   this.proyectoEditado(); // marcamos como proyecto editado
   // console.log(this.contents[i][this.tipoCue[i]].common_properties.ui_properties.timeline_position.x);
@@ -161,9 +197,12 @@ export class CueListComponent implements OnInit, AfterViewInit {
       this.edit = msg;
       if (this.edit.guardar) { // sin guardar es true
         this.saveProject();
+        // this.edit.editing = false;
+        // console.log('sin guardar');
       } else if (this.edit.preferences) {
         this.preferencesDialog();
       }
+      // console.log(this.edit);
     });
 
  }
@@ -174,16 +213,17 @@ export class CueListComponent implements OnInit, AfterViewInit {
 
       switch (recibo.type) {
         case 'project': {
-          // console.log(recibo.value);
+          // console.log(this.edit);
           const msScript = recibo.value; // parseamos la entada
           this.project = msScript;
-          this.cueMs = msScript.CuemsScript; // asignamos a un objeto el contenido de CuemsScript
+          this.cueMs = this.project.CuemsScript; // asignamos a un objeto el contenido de CuemsScript
+          // this.updateCookie(this.cueMs);
           this.edit.name = this.cueMs.name; // enviamos el nombre hacia el navBar
           this.cargado = true; // pagina cargada
-           // esta pate de aquí es para asegurarnos de que se ejecuta después de tener respuesta del servidor ws
-          if (this.cueMs.cuelist === null) {
-            this.contents = this.cueMs.cuelist.contents; // asignamos el valor de la data del servidor al this.cue
-           }
+          if (this.cueMs.CueList.contents !== null) { // si tiene cues el proyecto
+          this.contents = this.cueMs.CueList.contents;
+          this.tipoCues();
+          }
           break;
        }
        case 'file_list': {
@@ -223,6 +263,13 @@ export class CueListComponent implements OnInit, AfterViewInit {
           this.proService.loadFromServer( recibo.value );
           break;
        }
+       case 'error': {
+        const options = {
+          autoClose: false
+        };
+        this.alertService.error('Error: ' + recibo.value, options);
+        break;
+     }
         default: {
            // statements;
            // console.log(recibo.type);
@@ -233,13 +280,21 @@ export class CueListComponent implements OnInit, AfterViewInit {
      });
  }
 
+//  updateCookie(obj): void{
+//   Cookies.set('cueMsCookie', obj);
+//   this.cueMsCookie = JSON.parse(Cookies.get('cueMsCookie'));
+//   console.log(this.cueMsCookie.CueList);
+//  }
+
  tipoCues(): void{
   this.tipoCue = [];
-  // tslint:disable-next-line: prefer-for-of
+     // tslint:disable-next-line: prefer-for-of
   for (let index = 0; index < this.contents.length; index++) {
-    const tipo = Object.keys(this.contents[index])[0];
-    this.tipoCue.push(tipo);
+      const tipo = Object.keys(this.contents[index])[0];
+      this.tipoCue.push(tipo);
+      // console.log(tipo);
   }
+
  //  console.log(this.tipoCue);
 }
 
@@ -422,9 +477,7 @@ drop(event: CdkDragDrop<string[]>): void {
 
 saveProject(): void{
   // this.notify = true;
-
-  this.cueMs.cuelist.contents = this.contents;
-
+  this.cueMs.CueList.contents = this.contents;
   this.proService.saveProjectToServer(this.project); // lo añadimos en el servidor
 
   this.edit.estiloGuardar = ''; // reseteamos estilo botón guardar
@@ -438,7 +491,8 @@ saveProject(): void{
   const checkedUuid = uuidv1();
   let uuidDuplicada = false;
   for (let index = 0; index < this.contents.length; index++) {
-    const actualUuid = this.contents[index][this.tipoCue[index]].common_properties.uuid;
+    const actualUuid = this.contents[index][this.tipoCue[index]].uuid;
+    // if ( actualUuid === checkedUuid || actualUuid === this.cueMs.cuelist.common_properties.uuid) {
     if ( actualUuid === checkedUuid ) {
       uuidDuplicada = true;
     }
@@ -458,7 +512,7 @@ saveProject(): void{
       newx = 0;
     } else {
       // tslint:disable-next-line: max-line-length
-      const xactual = this.contents[array - 1][this.tipoCue[array - 1]].common_properties.ui_properties.timeline_position.x - 50; // margen css
+      const xactual = this.contents[array - 1][this.tipoCue[array - 1]].UI_properties.timeline_position.x - 50; // margen css
       newx = xactual - -25; // otro marges css
       // console.log(newx);
     }
@@ -468,77 +522,72 @@ saveProject(): void{
     switch (type) {
       case 'audio':
         newCue = {
-          audiocue: {
-            common_properties: {
+          AudioCue: {
               uuid: checkedUuid,
               id: '',
               name: 'New Audio Cue',
               description: '',
-              disabled: false,
+              enabled: true,
               loaded: false, // * cue cargada y ready
               timecode: false, // *
               offset: '', // * Si timecode es true tiene un offset
               loop: 1, // 0 infinito, 1 desactivado o número de loops
-              prewait: '00:00.000',
-              postwait: '00:00.000',
+              prewait: null,
+              postwait: null,
               post_go: 'pause', // pause , go, go_at_end
               target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-              ui_properties: {
+              UI_properties: {
                 timeline_position: {
                   x: newx,
                   y: 0
-                  }
-              }
-            },
-            media: {
-              file_name: ''
-            },
+                }
+              },
+              Media: null,
             master_vol: 80, // 0 a 100 que afecta a todas las salidas
-            outputs: [
-              {
-                output_name: '',
+            Outputs: [
+              { AudioCueOutput: {
+                output_name: 'salida_001',
                 output_vol: 80,
-                channels: [
-                  {
+                channels: [{
+                  channel: {
                     channel_num: 0,
                     channel_vol: 80
                   }
-                ]
+                }],
               }
+            }
             ]
           }
         };
         break;
       case 'video':
         newCue = {
-          videocue: {
-            common_properties: {
+          VideoCue: {
               uuid: checkedUuid,
               id: '',
               name: 'New Video Cue',
               description: '',
-              disabled: false,
+              enabled: true,
               loaded: false, // * cue cargada y ready
               timecode: false, // *
               offset: '', // * Si timecode es true tiene un offset
               loop: 1,
-              prewait: '00:00.000',
-              postwait: '00:00.000',
+              prewait: null,
+              postwait: null,
               post_go: 'pause', // pause , go, go_at_end
               target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-              ui_properties: {
+              UI_properties: {
                 timeline_position: {
                   x: newx,
                   y: 0
-                  }
-              }
-            },
-            media: {
-              file_name: ''
-            },
-            outputs: [
-              {
-                output_name: '',
+                }
+              },
+              Media: {
+                file_name: ''
+              },
+            Outputs: [
+              { VideoCueOutput: {
+                output_name: 'salida_001',
                 output_geometry: {
                   x_scale: 0, // * Bloquearlo en la ui para poder editarlos unidos o independientes
                   y_scale: 0, // *
@@ -562,35 +611,34 @@ saveProject(): void{
                   }
                 }
               }
+              }
             ]
           }
         };
         break;
       case 'dmx':
         newCue = {
-          dmxcue: {
-            common_properties: {
+          DmxCue: {
               uuid: checkedUuid,
               id: '', // generar un string basado en las anteriores strings que se han podido convertir a números.
               name: 'New Dmx Cue',
               description: '',
-              disabled: false,
+              enabled: true,
               loaded: false,
               timecode: false,
               offset: '',
               loop: 1,
-              prewait: '00:00.000',
-              postwait: '00:00.000',
+              prewait: null,
+              postwait: null,
               post_go: 'pause', // pause , go, go_at_end
               target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-              ui_properties: {
+              UI_properties: {
                 timeline_position: {
                   x: newx,
                   y: 0
-                  }
-              }
-            },
-            media: {
+                }
+              },
+            Media: {
               file_name: ''
             },
             fadein_time: 5,
@@ -600,57 +648,53 @@ saveProject(): void{
         break;
       case 'action':
         newCue = {
-          action: {
-            common_properties: {
+          Action: {
               uuid: checkedUuid,
               id: '',
               name: 'New Action Cue',
               description: '',
-              disabled: false,
+              enabled: true,
               loaded: false,
               timecode: false,
               offset: '',
               loop: 1,
-              prewait: '00:00.000',
-              postwait: '00:00.000',
+              prewait: null,
+              postwait: null,
               post_go: 'pause', // pause , go, go_at_end
               target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-              ui_properties: {
+              UI_properties: {
                 timeline_position: {
                   x: newx,
                   y: 0
-                  }
-              }
-            },
+                }
+              },
             action_type: '', // tipo de accion a realizar
-            target: '' // uuid de la cue a la que apunta
+            action_target: '' // uuid de la cue a la que apunta
           }
         };
         break;
       case 'cuelist':
         newCue = {
-          cuelist: {
-            common_properties: {
+          CueList: {
               uuid: checkedUuid,
               id: '',
               name: 'New Group Cue',
               description: '',
-              disabled: false,
+              enabled: true,
               loaded: false,
               timecode: false,
               offset: '',
               loop: 1,
-              prewait: '00:00.000',
-              postwait: '00:00.000',
+              prewait: null,
+              postwait: null,
               post_go: 'pause', // pause , go, go_at_end
               target: '', // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-              ui_properties: {
+              UI_properties: {
                 timeline_position: {
                   x: newx,
                   y: 0
-                  }
-              }
-            },
+                }
+              },
             contents: []
           }
         };
@@ -678,7 +722,7 @@ saveProject(): void{
  }
 
  delCueSelect(): void{ // borrado con teclado comando borrar
-    if (this.idCueSelected) { // si tenemos una cue seleccionada
+    if (this.idCueSelected >= 0) { // si tenemos una cue seleccionada
     this.contents.splice(this.idCueSelected, 1); // borramos la cue del array cueList
     // this.sortableComponent.writeValue(this.cueList); // la borramos del drop
     this.tipoCues(); // actualizamos el listado de tipos de cues
@@ -697,7 +741,7 @@ saveProject(): void{
 
     if (this.idCueSelected !== undefined) { // si tenemos una cue seleccionada
 
-      const post_go = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties.post_go;
+      const post_go = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go;
 
       if (this.contents.length > this.idCueSelected) { // Si la cantidad de cues al id de la cue seleccionada
 
@@ -769,16 +813,16 @@ saveProject(): void{
  continueSwich(): void{ // conmutar el continue de las cues
     if (this.idCueSelected !== undefined) { // si tenemos una cue seleccionada
 
-      const post_go = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties.post_go;
+      const post_go = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go;
 
       if (post_go === 'pause') {
-        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties.post_go = 'go';
+        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go = 'go';
         return;
       } else if (post_go === 'go') {
-        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties.post_go = 'go_at_end';
+        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go = 'go_at_end';
         return;
       } else if (post_go === 'go_at_end') {
-        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties.post_go = 'pause';
+        this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go = 'pause';
         return;
       }
 
@@ -786,14 +830,14 @@ saveProject(): void{
  }
  pause(idx): void {
   if (this.idCueSelected !== undefined) {
-    this.contents[idx][this.tipoCue[idx]].common_properties.post_go = 'pause';
+    this.contents[idx][this.tipoCue[idx]].post_go = 'pause';
   }
  }
  auto_go(idx): void {
   if (this.idCueSelected !== undefined) {
     // console.log(idx + 1);
 
-    this.contents[idx][this.tipoCue[idx]].common_properties.post_go = 'go';
+    this.contents[idx][this.tipoCue[idx]].post_go = 'go';
     // this.cueList[index + 1].position.x = this.cueList[index].position.x;
     // this.cueList[index + 1].position.y = 40;
 
@@ -805,7 +849,7 @@ saveProject(): void{
  }
  post_go(idx): void {
   if (this.idCueSelected !== undefined) {
-    this.contents[idx][this.tipoCue[idx]].common_properties.post_go = 'go_at_end';
+    this.contents[idx][this.tipoCue[idx]].post_go = 'go_at_end';
   }
  }
 
@@ -813,12 +857,13 @@ saveProject(): void{
 // modes
 
 initMode(value): void{
+  // console.log('imprimo edit');
   if (value === 'edit') {
     this.edit.mode = false;
     this.proService.changeEditing(this.edit);
   } else if (value === 'show') {
     this.edit.mode = true;
-    this.proService.changeEditing(this.edit);
+    // this.proService.changeEditing(this.edit);
   }
 }
  Mode(): void{
@@ -844,7 +889,7 @@ initMode(value): void{
    dialogConfig.width = '300px';
 
    dialogConfig.data = {
-    name: 'Estás a punto de borrar la cue ' + this.contents[idx][this.tipoCue[idx]].common_properties.name,
+    name: 'Estás a punto de borrar la cue ' + this.contents[idx][this.tipoCue[idx]].name,
     msg: 'Confirmas borrarla?'
  };
 
@@ -864,15 +909,19 @@ initMode(value): void{
  editCueDialog(): void {
 
  if (this.idCueSelected !== undefined) {
-
-  const common_properties = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].common_properties;
   const tipo = this.tipoCue[this.idCueSelected];
+  const commonProperties = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]];
   let cueMedia = false;
-  let media;
+  let Media;
 
-  if (tipo === 'audiocue' || tipo === 'videocue' || tipo === 'dmxcue') {
-    media = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].media;
-    cueMedia = true;
+  if (tipo === 'AudioCue' || tipo === 'VideoCue' || tipo === 'dDmxCue') {
+    Media = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Media;
+    if (Media === null) {
+      cueMedia = true;
+    } else {
+      Media = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Media.file_name;
+      cueMedia = true;
+    }
   }
 
   const dialogConfig = new MatDialogConfig();
@@ -885,12 +934,12 @@ initMode(value): void{
 
     dialogConfig.data = {
       mediaContent: true,
-      name        : common_properties.name,
-      prewait     : common_properties.prewait,
-      postwait    : common_properties.postwait,
-      loop        : common_properties.loop,
-      post_go     : common_properties.post_go,
-      media       : media.file_name,
+      name        : commonProperties.name,
+      prewait     : commonProperties.prewait,
+      postwait    : commonProperties.postwait,
+      loop        : commonProperties.loop,
+      post_go     : commonProperties.post_go,
+      media       : Media,
       mediaList   : this.mediaList
   };
 
@@ -898,11 +947,11 @@ initMode(value): void{
 
     dialogConfig.data = {
       mediaContent: false,
-      name        : common_properties.name,
-      prewait     : common_properties.prewait,
-      postwait    : common_properties.postwait,
-      loop        : common_properties.loop,
-      post_go     : common_properties.post_go
+      name        : commonProperties.name,
+      prewait     : commonProperties.prewait,
+      postwait    : commonProperties.postwait,
+      loop        : commonProperties.loop,
+      post_go     : commonProperties.post_go
   };
 
   }
@@ -918,18 +967,24 @@ initMode(value): void{
         } else {
 
           if (cueMedia) {
-            common_properties.name = data.name;
-            common_properties.prewait = data.prewait;
-            common_properties.postwait = data.postwait;
-            common_properties.loop = data.loop;
-            common_properties.post_go = data.post_go;
-            media.file_name = data.media;
+            commonProperties.name = data.name;
+            commonProperties.prewait = data.prewait;
+            commonProperties.postwait = data.postwait;
+            commonProperties.loop = data.loop;
+            commonProperties.post_go = data.post_go;
+            if (data.media !== null) {
+              commonProperties.Media = {
+                file_name: data.media
+              };
+              console.log(this.contents);
+            }
+            // Media.file_name = data.media;
           } else {
-            common_properties.name = data.name;
-            common_properties.prewait = data.prewait;
-            common_properties.postwait = data.postwait;
-            common_properties.loop = data.loop;
-            common_properties.post_go = data.post_go;
+            commonProperties.name = data.name;
+            commonProperties.prewait = data.prewait;
+            commonProperties.postwait = data.postwait;
+            commonProperties.loop = data.loop;
+            commonProperties.post_go = data.post_go;
           }
           this.proyectoEditado();
         //  console.log('la media que llega al cuelist' + data.media);
@@ -970,8 +1025,11 @@ initMode(value): void{
  }
 
  proyectoEditado(): void {
-          this.edit.estiloGuardar = 'warn';
-          this.proService.changeEditing(this.edit);
+    this.cueMs.CueList.contents = this.contents;
+    // this.updateCookie(this.cueMs);
+    this.edit.estiloGuardar = 'warn';
+    // this.edit.edited = true;
+    this.proService.changeEditing(this.edit);
  }
 }
 

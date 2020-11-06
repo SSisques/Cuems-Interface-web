@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-edit-cue',
@@ -21,6 +22,7 @@ export class EditCueComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<EditCueComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -107,6 +109,27 @@ save(): void {
 close(): void {
   this.dialogRef.close('close');
   // console.log('esto graba por ahora');
+}
+msgClose(): void {
+  const dialogConfig = new MatDialogConfig();
+  dialogConfig.disableClose = true;
+  dialogConfig.autoFocus = true;
+  dialogConfig.height = '150px';
+  dialogConfig.width = 'auto';
+
+  dialogConfig.data = {
+    name: 'Cerramos sin aplicar cambios?',
+    msg: ''
+ };
+
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+
+  dialogRef.afterClosed().subscribe(
+       data => {
+         if (data === true) {
+          this.dialogRef.close('close');
+         }
+       });
 }
 handleKeyUp(e): void{ // grabamos al presionar el enter
   if (e.keyCode === 13){

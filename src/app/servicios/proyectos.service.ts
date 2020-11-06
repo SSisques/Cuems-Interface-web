@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { WebsocketService } from './websocket.service';
 import { BehaviorSubject } from 'rxjs';
+import { v1 as uuidv1 } from 'uuid'; // importamos el generador v1 de uuid https://www.npmjs.com/package/uuid
 
 @Injectable({
   providedIn: 'root'
@@ -39,13 +40,32 @@ export class ProyectosService {
     this.wsService.wsEmit({action: 'project_restore', value: uuid});
   }
 
-saveToServer( NAME: string, UNIX_NAME: string, ABOUT: string ): void {
-// al adquirir uno nuevo no grabarlo en el servidor hasta que no le de a guardar
-  const proyectoSave: any = { // muestra de como hay qye grabar un proyecto en el servidor
+saveToServer( NAME: string, UNIX_NAME: string, DESC: string ): void {
+  const proyectoSave: CuemsProject = {
     CuemsScript: {
-      name: NAME,
+      uuid: null,
       unix_name: UNIX_NAME,
-      about: ABOUT
+      name: NAME,
+      description: DESC,
+      created: null,
+      modified: null,
+      CueList: {
+        uuid: uuidv1(),
+        id: '0',
+        name: 'root',
+        description: '',
+        enabled: true,
+        loaded: false,
+        timecode: false,
+        offset: '',
+        loop: 1,
+        prewait: '0',
+        postwait: '0',
+        post_go: 'pause',
+        target: '',
+        UI_properties: null,
+        contents: []
+        }
     }
 };
   this.wsService.wsEmit( {action: 'project_save', value: proyectoSave} );
@@ -53,6 +73,7 @@ saveToServer( NAME: string, UNIX_NAME: string, ABOUT: string ): void {
 }
 saveProjectToServer(project: CuemsProject): void {
   // añadir el aviso de proyecto guardado
+  // console.log(project);
   this.wsService.wsEmit( {action: 'project_save', value: project} );
 }
 
@@ -84,43 +105,61 @@ export interface CuemsProject {
   CuemsScript: CuemsScript;
 }
 export interface CuemsScript {
-  uuid: any;
+  uuid?: any;
+  unix_name: string;
   name: string;
   description: string;
   created: string; // aplicar la zona horaria
   modified: string; // formato de tiempo ISO YYYY-MM-DDTHH:MM:SS
-  cuelist: CueList; // el primer cuelist es el script
+  CueList: CueList; // el primer cuelist es el script
 }
-export interface CueList {
-  common_properties: CommonProperties;
+export interface CueList extends CommonProperties {
+  uuid: string;
+  id: string; // generar un string basado en las anteriores strings que se han podido convertir a números.
+  name: string;
+  description: string;
+  enabled: boolean; // mute de cue, desactivada
+  loaded: boolean; // cue cargada y ready
+  timecode: boolean;
+  offset?: string; // Si timecode es true tiene un offset
+  loop: number; // 0 infinito, 1 desactivado o número de loops
+  prewait: string;
+  postwait: string;
+  post_go: string; // pause , go, go_at_end
+  target?: string; // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
   contents: Contents[];
 }
 export interface Contents {
-  audiocue?: AudioCue;
-  videocue?: VideoCue;
-  dmxcue?: DmxCue;
-  action?: ActionCue; // cue de acciones
-  cuelist?: CueList; // son grupos
+  AudioCue?: AudioCue;
+  VideoCue?: VideoCue;
+  DmxCue?: DmxCue;
+  Action?: ActionCue; // cue de acciones
+  CueList?: CueList; // son grupos
 }
-export interface AudioCue {
-  common_properties: CommonProperties;
-  media: Media;
+export interface AudioCue extends CommonProperties {
+  Media: Media;
   master_vol: number; // 0 a 100 que afecta a todas las salidas
-  outputs: AudioCueOutput[]; // * salidas virtuales
+  Outputs: Outputs[]; // * salidas virtuales
+}
+export interface VideoCue extends CommonProperties {
+  Media: Media;
+  Outputs: Outputs[]; // salidas virtuales
+}
+export interface Outputs {
+  AudioCueOutput?: AudioCueOutput;
+  VideoCueOutput?: VideoCueOutput;
 }
 export interface AudioCueOutput {
   output_name: string;
   output_vol: number;
-  channels: Channel[]; // número de canales de la salida virtual
+  channels: Channels[]; // número de canales de la salida virtual
+}
+export interface Channels {
+  channel: Channel;
 }
 export interface Channel {
   channel_num: number;
   channel_vol: number;
-}
-export interface VideoCue {
-  common_properties: CommonProperties;
-  media: Media;
-  outputs: VideoCueOutput[]; // salidas virtuales
 }
 export interface VideoCueOutput {
   output_name: string;
@@ -141,26 +180,24 @@ export interface Coordenates {
   x: number; // en el video de 0 a 1
   y: number;
 }
-export interface DmxCue {
-  common_properties: CommonProperties;
-  media: Media;
+export interface DmxCue extends CommonProperties {
+  Media: Media;
   fadein_time: number;
   fadeout_time: number;
 }
 export interface Media {
   file_name: string;
 }
-export interface ActionCue {
-  common_properties: CommonProperties;
+export interface ActionCue extends CommonProperties {
   action_type: string; // tipo de accion a realizar
-  target: string; // uuid de la cue a la que apunta
+  action_target: string; // uuid de la cue a la que apunta
 }
 export interface CommonProperties {
   uuid: string;
   id: string; // generar un string basado en las anteriores strings que se han podido convertir a números.
   name: string;
   description: string;
-  disabled: boolean; // mute de cue, desactivada
+  enabled: boolean; // mute de cue, desactivada
   loaded: boolean; // cue cargada y ready
   timecode: boolean;
   offset?: string; // Si timecode es true tiene un offset
@@ -169,10 +206,10 @@ export interface CommonProperties {
   postwait: string;
   post_go: string; // pause , go, go_at_end
   target?: string; // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
-  ui_properties: UiProperties; // propiedades de la ui
+  UI_properties: UiProperties; // propiedades de la ui
 }
 export interface UiProperties {
-  timeline_position: Coordenates;
+  timeline_position?: Coordenates;
 }
 // export interface TimelinePosition {
 //   x: number;

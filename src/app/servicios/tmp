@@ -1,0 +1,60 @@
+{
+    "CuemsScript": {
+        "unix_name": "bla_bla",
+        "name": "basdasdla",
+        "description": "hola",
+        "CueList": {
+            "uuid": "d47a75e2-f76e-4c77-b33e-e1df40ffdf02",
+            "id": "0",
+            "name": "root",
+            "description": "des2",
+            "enabled": "true",
+            "loaded": "false",
+            "timecode": "false",
+            "offset": "",
+            "loop": "1",
+            "prewait": "0",
+            "postwait": "0",
+            "post_go": "pause",
+            "target": "",
+            "ui_properties": "",
+            "contents": [{
+                "AudioCue": {
+                    "uuid": "d32a75e2-f76e-4c77-b33e-e1df40ffdf02",
+                    "id": "0",
+                    "name": "root",
+                    "description": "des2",
+                    "enabled": "true",
+                    "loaded": "false",
+                    "timecode": "false",
+                    "offset": null,
+                    "loop": "1",
+                    "prewait": null,
+                    "postwait": null,
+                    "post_go": "pause",
+                    "target": null,
+                    "ui_properties": "",
+                    "Media": {
+                        "file_name": "0002.jpg"
+                    },
+                    "master_vol": 100,
+                    "Outputs": [{
+                            "AudioCueOutput": {
+                                "output_name": "salida1",
+                                "output_vol": 100,
+                                "channels": null
+                            }
+                        },
+                        {
+                            "AudioCueOutput": {
+                                "output_name": "salida2",
+                                "output_vol": 100,
+                                "channels": null
+                            }
+                        }
+                    ]
+                }
+            }]
+        }
+    }
+}

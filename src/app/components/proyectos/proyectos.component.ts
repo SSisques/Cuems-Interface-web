@@ -80,7 +80,13 @@ export class ProyectosComponent implements OnInit{
           break;
 
         }
-        case 'project_save': {
+        case 'project_save': { // recibimos cuando creamos u nuevo proyecto
+
+          this.router.navigate( ['/cuelist', recibo.value, 'edit'] ); // redirigimos al recibir respuesta
+
+          break;
+        }
+        case 'project_duplicate': {
 
           this.router.navigate( ['/cuelist', recibo.value, 'edit'] ); // redirigimos al recibir respuesta
 
@@ -309,7 +315,7 @@ newProjectDialog(): void {
         if (data === 'close') { // si cierra la ventana
 
         } else {
-          this.proService.saveToServer(data.name, data.unix_name, data.about); // creamos el nuevo proyecto
+          this.proService.saveToServer(data.name, data.unix_name, data.description); // creamos el nuevo proyecto
         }
       });
 

@@ -32,10 +32,10 @@
                 </mat-form-field>
                 <br>
                 <mat-form-field class="full-width">
-                    <mat-label>{{ 'new.project.about' | translate }}</mat-label>
-                    <input matInput formControlName="about" placeholder="{{ 'new.project.about.placeholder' | translate }}" #message>
+                    <mat-label>{{ 'new.project.description' | translate }}</mat-label>
+                    <textarea matInput formControlName="description" placeholder="{{ 'new.project.description.placeholder' | translate }}" #message></textarea>
                     <mat-hint align="end">{{message.value.length}} / 255</mat-hint>
-                    <mat-error *ngIf="this.editForm.controls.about.invalid">{{getAboutErrorMessage()}}</mat-error>
+                    <mat-error *ngIf="this.editForm.controls.description.invalid">{{getDescriptionErrorMessage()}}</mat-error>
                 </mat-form-field>
 
             </mat-dialog-content>
