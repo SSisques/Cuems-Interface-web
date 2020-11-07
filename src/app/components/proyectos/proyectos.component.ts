@@ -88,8 +88,8 @@ export class ProyectosComponent implements OnInit{
         }
         case 'project_duplicate': {
 
-          this.router.navigate( ['/cuelist', recibo.value, 'edit'] ); // redirigimos al recibir respuesta
-
+          // this.router.navigate( ['/cuelist', recibo.value.new_uuid, 'edit'] ); // redirigimos al recibir respuesta
+          this.proService.project_List();
           break;
         }
         case 'list_update': {
