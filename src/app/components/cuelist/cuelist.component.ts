@@ -863,7 +863,7 @@ initMode(value): void{
     this.proService.changeEditing(this.edit);
   } else if (value === 'show') {
     this.edit.mode = true;
-    // this.proService.changeEditing(this.edit);
+    this.proService.changeEditing(this.edit);
   }
 }
  Mode(): void{
