@@ -59,8 +59,8 @@ saveToServer( NAME: string, UNIX_NAME: string, DESC: string ): void {
         timecode: false,
         offset: '',
         loop: 1,
-        prewait: '0',
-        postwait: '0',
+        prewait: { CTimecode: '00:00:00.000' },
+        postwait: { CTimecode: '00:00:00.000' },
         post_go: 'pause',
         target: '',
         UI_properties: null,
@@ -79,6 +79,10 @@ saveProjectToServer(project: CuemsProject): void {
 
 loadFromServer(uuid: string): void { // cargamos el proyecto del servidor
   this.wsService.wsEmit({action: 'project_load', value: uuid});
+  // console.log('Cargamos desde el servidor el proyecto uuid', uuid);
+}
+projectReady(uuid: string): void { // nos ponemos en modo ejecución
+  this.wsService.wsEmit({action: 'project_ready', value: uuid});
   // console.log('Cargamos desde el servidor el proyecto uuid', uuid);
 }
 duplicateFromServer(uuid: string): void {
@@ -123,8 +127,8 @@ export interface CueList extends CommonProperties {
   timecode: boolean;
   offset?: string; // Si timecode es true tiene un offset
   loop: number; // 0 infinito, 1 desactivado o número de loops
-  prewait: string;
-  postwait: string;
+  prewait: CTimecode;
+  postwait: CTimecode;
   post_go: string; // pause , go, go_at_end
   target?: string; // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
   contents: Contents[];
@@ -187,6 +191,16 @@ export interface DmxCue extends CommonProperties {
 }
 export interface Media {
   file_name: string;
+  regions: Regions[];
+}
+export interface Regions {
+ region: Region;
+}
+export interface Region {
+  id: number; // 0 por defecto
+  loop: number; // 0 infinito, 1 desactivado o número de loops - implementarlo
+  in_time: CTimecode; // tiempo de inicio de cue - leo el metadata y pasa y lo aplico al in out
+  out_time: CTimecode; //  tiempo de final de cue formato HH/MM/SS/MMM - máxsimo aplicable a la diracuión de la media
 }
 export interface ActionCue extends CommonProperties {
   action_type: string; // tipo de accion a realizar
@@ -202,19 +216,23 @@ export interface CommonProperties {
   timecode: boolean;
   offset?: string; // Si timecode es true tiene un offset
   loop: number; // 0 infinito, 1 desactivado o número de loops
-  prewait: string;
-  postwait: string;
+  prewait: CTimecode;
+  postwait: CTimecode; // HH/MM/SS/MMM Crear campos separados
   post_go: string; // pause , go, go_at_end
   target?: string; // uuid de la cue a la que apunta si no la define el susuario apunta a la siguiente
   UI_properties: UiProperties; // propiedades de la ui
 }
 export interface UiProperties {
+  warning: number; // 0 por defecto - 1 activado
   timeline_position?: Coordenates;
 }
-// export interface TimelinePosition {
-//   x: number;
-//   y: number;
-//  }
+export interface TimelinePosition {
+  x: number;
+  y: number;
+ }
+export interface CTimecode {
+  CTimecode: string;
+ }
 
  // export interface DmxScene {
 //   uuid: string; // *

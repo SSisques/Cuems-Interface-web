@@ -21,6 +21,10 @@ export class WebsocketService {
     }
   });
 
+// Conexion websocket deserialized
+  public wsBlob = webSocket({
+    url: this.host
+  });
   constructor() {
     this.ws.subscribe(); // nos subscribimos al servidor
 }
@@ -28,5 +32,8 @@ export class WebsocketService {
   wsEmit(msg: any): void {
   this.ws.next(msg); // emitimos el mensage por el ws
 }
+// wsBlobEmit(msg: any): void {
+//   this.wsBlob.next(msg); // emitimos el mensage por el ws
+// }
 
   }

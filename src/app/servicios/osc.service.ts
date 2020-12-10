@@ -3,48 +3,87 @@ import { OscCompomnent } from 'osc-js'; // https://github.com/colinbdclark/osc.j
 import { getLocaleNumberSymbol } from '@angular/common';
 
 declare var osc: any;
-var Msg;
+let Msg;
 
-//configuramos servidor y conexión websocket
-var oscPort = new osc.WebSocketPort({
-    url: "wss://dev.stagelab.net/realtime", // URL to your Web Socket server.
+// configuramos servidor y conexión websocket
+const oscPort = new osc.WebSocketPort({
+    url: 'wss://dev.stagelab.net/realtime', // URL to your Web Socket server.
     metadata: true
   });
 
-//conectamos
-//oscPort.open(); //atención!!! está muteado. 
+// conectamos
+oscPort.open(); // atención!!! está muteado.
 
-//leemos el mensaje de entrada y lo iomprimimos
-oscPort.on("message", function (oscMsg) {
+// Primero enviar la / y esperar la contestación y me envia Go - engine stutus - timecode - next cue al principio la primera vez. 
+// despues tenemos el current cue y  next
+
+// leemos el mensaje de entrada y lo iomprimimos
+oscPort.on('message', function (oscMsg) {
   Msg = oscMsg;
+  // console.log(Msg.args[0].value);
+  
   });
  
 
 @Injectable()
 export class OscService {
 
-
-    
     constructor() {
      //   console.log('servicio osc listo para usarse');
      }
 
-     envioGo(){ //sentencia Go
+     envioInit(){
+
+     }
+
+     envioLoad(): void{ // sentencia Go
+      // console.log('envio Go osc service');
+
+       oscPort.send({
+         address: '/engine/command/load',
+         args: [
+           {
+             type: 's',
+             value: 'dddd'
+           }
+         ]
+       });
+     }
+
+     envioGo(): void{ // sentencia Go
        // console.log('envio Go osc service');
+
         oscPort.send({
-          address: "/node0/videoplayer1/start",
+          address: '/engine/command/go',
           args: [
             {
-              type: "T",
+              type: 'I',
               value: 1
             }
           ]
-        });  
+        });
+        // oscPort.send({
+        //   address: '/engine/command/load',
+        //   args: [
+        //     {
+        //       type: 's',
+        //       value: 'dddd'
+        //     }
+        //   ]
+        // });
+        // oscPort.send({
+        //   address: '/node0/videoplayer0/start',
+        //   args: [
+        //     {
+        //       type: 'T',
+        //       value: 1
+        //     }
+        //   ]
+        // });
       }
-       recivoMsg(){
+       recivoMsg(): void{
         return Msg;
-        
-    } 
+    }
 }
 
 

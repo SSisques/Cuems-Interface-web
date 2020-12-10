@@ -17,6 +17,10 @@ footer {
     width: 100%;
 }
 
+#main-tab-group {
+    height: 100%;
+}
+
 .main-container {
     margin-top: 20px;
 }
@@ -28,6 +32,10 @@ footer {
 .with-icon {
     display: flex;
     align-items: center;
+}
+
+.warning-icon {
+    color: red;
 }
 
 [hidden] {

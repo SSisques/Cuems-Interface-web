@@ -26,6 +26,9 @@
                     <mat-list-option *ngFor="let file of filesList" [value]="file.uuid">
                         <mat-icon mat-list-icon>note</mat-icon>
                         <span matLine>
+                            <!-- {{thumbnail(file.uuid)}} -->
+                        </span>
+                        <span matLine>
                             {{file.unix_name}}
                         </span>
                         <span matLine>

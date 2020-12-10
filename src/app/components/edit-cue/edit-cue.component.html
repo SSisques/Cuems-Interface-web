@@ -27,7 +27,12 @@
                         <input matInput formControlName="postwait" (keyup)="handleKeyUp($event)">
                     </mat-form-field>
                     <br>
-
+                    <mat-form-field class="full-width">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description" placeholder="Notas , pie ..." #message></textarea>
+                        <mat-hint align="end">{{message.value.length}} / 255</mat-hint>
+                    </mat-form-field>
+                    <br>
                     <mat-radio-group formControlName="loop" [(ngModel)]="loop">
                         <mat-radio-button class="example-margin" value="cero" (click)="loopChange('inf')">Inifinite loop</mat-radio-button>
                         <mat-radio-button class="example-margin" value="uno" (click)="loopChange('loop')">Loop times</mat-radio-button>
@@ -37,10 +42,7 @@
                         <mat-label>Loop times</mat-label>
                         <input matInput formControlName="loop_times" (keyup)="handleKeyUp($event)">
                     </mat-form-field>
-
-
-
-                    <br>
+                    &nbsp;
                     <mat-form-field appearance="fill">
                         <mat-label>Post_go</mat-label>
                         <mat-select formControlName="post_go">
@@ -49,18 +51,33 @@
                             <mat-option value="go_at_end">Go next cue at end of this cue</mat-option>
                         </mat-select>
                     </mat-form-field>
-
-
                 </mat-dialog-content>
             </div>
         </mat-tab>
-        <mat-tab label="Media" *ngIf="mediaContent">
+        <!-- <mat-tab label="Media" *ngIf="mediaContent"> -->
+        <mat-tab label="Media">
             {{ mediaContent }}
+            <br>
             <mat-form-field appearance="fill">
                 <mat-label>Selector de media</mat-label>
-                <mat-select formControlName="media">
+                <mat-select formControlName="media" (selectionChange)="file_LoadMeta($event.value)">
                     <mat-option *ngFor="let files of mediaList" [value]="files.unix_name">{{ files.unix_name}}</mat-option>
                 </mat-select>
+            </mat-form-field>
+            &nbsp;
+            <mat-form-field appearance="outline">
+                <mat-label>In_time</mat-label>
+                <input matInput formControlName="in_time" (blur)="duration(editForm.value.in_time, editForm.value.out_time)" (keyup)="handleKeyUp($event)">
+            </mat-form-field>
+            &nbsp;
+            <mat-form-field appearance="outline">
+                <mat-label>Out_time</mat-label>
+                <input matInput formControlName="out_time" (blur)="duration(editForm.value.in_time, editForm.value.out_time)" (keyup)="handleKeyUp($event)">
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="outline">
+                <mat-label>Duration</mat-label>
+                <input matInput formControlName="duration" (keyup)="handleKeyUp($event)">
             </mat-form-field>
 
         </mat-tab>

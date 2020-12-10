@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
 import { FileItem } from '../../models/file-item';
 import { UploadService } from '../../servicios/upload.service';
-import { FilesService, Files } from '../../servicios/files.service';
+import { FilesService, FileList } from '../../servicios/files.service';
 import { WebsocketService } from '../../servicios/websocket.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -23,8 +23,8 @@ export class MediaComponent implements OnInit {
   archivosComponent: FileItem[] = [];
   myFileUuid: any[] = [];
   myTrashFileUuid: any[] = [];
-  filesList: Files [] = [];
-  filesTrashList: Files [] = [];
+  filesList: FileList [] = [];
+  filesTrashList: FileList [] = [];
 
   selected: any[] = [];
   notify = false;
@@ -66,13 +66,17 @@ export class MediaComponent implements OnInit {
           this.filesList.push({ // hacemos el push de los proyectos al listado
             uuid: myKeys[0],
             name: recibo.value[index][this.myFileUuid[index]].name,
+            unix_name: recibo.value[index][this.myFileUuid[index]].unix_name,
             created: recibo.value[index][this.myFileUuid[index]].created,
             modified: recibo.value[index][this.myFileUuid[index]].modified,
-            unix_name: recibo.value[index][this.myFileUuid[index]].unix_name,
             in_projects: recibo.value[index][this.myFileUuid[index]].in_projects,
-            in_trash_projects: recibo.value[index][this.myFileUuid[index]].in_trash_projects
+            in_trash_projects: recibo.value[index][this.myFileUuid[index]].in_trash_projects,
+            type: recibo.value[index][this.myFileUuid[index]].type
            });
 
+          }
+          for (const uuid of this.myFileUuid) {
+            this.thumbnail(uuid);
           }
 
           this.cargado = true; // pagina cargada
@@ -92,11 +96,12 @@ export class MediaComponent implements OnInit {
           this.filesTrashList.push({ // hacemos el push de los proyectos al listado
             uuid: myKeys[0],
             name: recibo.value[index][this.myTrashFileUuid[index]].name,
+            unix_name: recibo.value[index][this.myTrashFileUuid[index]].unix_name,
             created: recibo.value[index][this.myTrashFileUuid[index]].created,
             modified: recibo.value[index][this.myTrashFileUuid[index]].modified,
-            unix_name: recibo.value[index][this.myTrashFileUuid[index]].unix_name,
             in_projects: recibo.value[index][this.myTrashFileUuid[index]].in_projects,
-            in_trash_projects: recibo.value[index][this.myTrashFileUuid[index]].in_trash_projects
+            in_trash_projects: recibo.value[index][this.myTrashFileUuid[index]].in_trash_projects,
+            type: recibo.value[index][this.myFileUuid[index]].type
            });
 
           }
@@ -127,6 +132,18 @@ export class MediaComponent implements OnInit {
         }
      }
      });
+  }
+  thumbnail(uuid): void{
+    this.wsService.wsBlob.subscribe(msg => {
+      if (msg instanceof Blob) {
+        console.log(msg);
+      }
+      // console.log(msg);
+    });
+    this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid});
+    // this.fileService.files_LoadThumbnail(uuid);
+    // console.log(uuid);
+    
   }
   // selecciones
   selectAll(): void {
