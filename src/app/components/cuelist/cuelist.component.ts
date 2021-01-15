@@ -16,6 +16,8 @@ import { PreferencesComponent } from '../preferences/preferences.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 // import * as Cookies from 'js-cookie'; // https://github.com/js-cookie/js-cookie
 
+import { webSocket } from 'rxjs/webSocket';
+
 
 @Component({
   selector: 'app-cuelist',
@@ -46,9 +48,75 @@ export class CueListComponent implements OnInit, AfterViewInit {
                   });
                   this.fileService.files_List(); // llamamos a la listado multimedia
                   this.recibimosEdit(); // recivimos datos del servicio proyectos comunicación con navbar
-
                   this.recibimosWs(); // recibimos la respuesta del servidor
                 }
+    FULL_PATH: any[] = [];
+    nextCue; 
+   // Conexion websocket deserialized
+   public wsRealtime = webSocket({
+    url: 'wss://dev.stagelab.net/realtime',
+    deserializer: (data: any) => this.in_message(data),
+    serializer: (msg: any) => msg,
+    binaryType: 'arraybuffer'
+    });
+
+    in_message(mess: any) {
+    
+      if (mess.data instanceof ArrayBuffer) {
+        let dataView = new DataView(mess.data);
+        const msg = new OSC.Message();
+        msg.unpack(dataView);
+
+          // console.log(dataView);
+        switch (msg.address) {
+          case '/engine/status/currentcue':
+            // console.log('current cue');
+            // console.log(msg.args[0]);
+          break;
+          case '/engine/status/nextcue':
+            // console.log('next cue');
+            // console.log(msg.args[0]);
+            // this.nextCue = msg.args[0];
+            // console.log(msg.args[0]);
+            for (let index = 0; index < this.cueMs.CueList.contents.length; index++) {
+              const element = this.cueMs.CueList.contents[index];
+              const uuid = element[this.tipoCue[index]].uuid;
+              // console.log(index);
+              if (uuid === msg.args[0]) {
+                this.idCueSelected = index; // asignamos la nueva posición del cursor en el cuelist
+                // console.log(index);
+              }
+            }
+            // si recibo blanco hemos llegado al final
+            if (msg.args[0] === '') {
+              this.unselectCue();
+            }
+            
+          break;
+        
+          default:
+            break;
+        }
+
+      } else {
+        let json = JSON.parse(mess.data);
+        // this.FULL_PATH = json;
+        // console.log(this.FULL_PATH.CONTENTS.engine.CONTENTS.status.CONTENTS.nextcue);
+        // this.nextCue = this.FULL_PATH.CONTENTS.engine.CONTENTS.status.CONTENTS.nextcue.VALUE; // actualizamos la next cue desde el full_path cuando lo pedimos
+      }
+    }
+
+    realTime(){
+  
+      this.wsRealtime.subscribe( // nos conectamos al realtime
+        data => {
+        });
+      // console.log('realtime');
+      
+      
+      // this.wsRealtime.next('/'); // emitimos el mensage por el ws
+      
+      }
 
   // objeto que compartimos con el navbar
   edit = {
@@ -268,18 +336,36 @@ readyGo = false;
           break;
        }
        case 'project_ready': {
-        console.log(recibo.value);
+        // console.log(recibo.value);
         if (recibo.value === this.cueMs.uuid){
-          // ya podemos conectarnos al realtime
+          this.proService.changeEditing(this.edit); // enlace con navbar posicionamiento en modo edit
+          this.edit.mode = !this.edit.mode; // conmutamos al modo en modo edit
+          this.realTime(); // ya podemos conectarnos al realtime
+          // this.recibimosRealtime();
           this.readyGo = true; // activar la posibilidad de hacer go cuando reciba ok
           this.idCueSelected = 0; // seleccionar la cue 0 resetall
         }
         const options = {
-          autoClose: false
+          autoClose: true
         };
-        this.alertService.success('Proyecto actualizado ', options);
+        this.alertService.success('Engine Activo ', options);
         break;
      }
+  //    case 'project_load': {
+       
+  //     // console.log(recibo.value);
+  //     // if (recibo.value.uuid === this.cueMs.uuid){
+  //       // this.proService.changeEditing(this.edit); // enlace con navbar posicionamiento en modo edit
+  //       // this.edit.mode = !this.edit.mode; // conmutamos al modo en modo edit
+  //       // this.readyGo = false;
+  //       // this.recibimosRealtime();
+  //     // }
+  //     const options = {
+  //       autoClose: false
+  //     };
+  //     this.alertService.success('Engine Activo ', options);
+  //     break;
+  //  }
        case 'error': {
         const options = {
           autoClose: false
@@ -871,39 +957,26 @@ duration(cue): string{
 
  go(): void{ // cuando hacemos go
 
-  this.oscService.envioGo();
+  // this.oscService.envioGo();
+  console.log('go'); // añadir el runig cue aquí
+      const messageGo = new OSC.Message('/engine/command/go');
+      const binaryGo = messageGo.pack();
+      this.wsRealtime.next(binaryGo);
+      // console.log(this.cueMs.CueList.contents);
+      
 
-    // if (this.idCueSelected !== undefined) { // si tenemos una cue seleccionada
-
-    //   const post_go = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].post_go;
-
-    //   if (this.contents.length > this.idCueSelected) { // Si la cantidad de cues al id de la cue seleccionada
-
-    //     if (post_go === 'go') { // comprobar el continue de las cues
-    //       console.log('Go cue ' + this.idCueSelected ); // go de la actual
-    //       console.log('Go cue ' + ++this.idCueSelected ); // go de la siguiente
-    //       this.idCueSelected = this.idCueSelected + 1; // saltamos dos
-    //       // this.selectCue(this.idCueSelected);
-    //     } else {
-    //       console.log('Go cue ' + this.idCueSelected ); // go de la actual
-    //       this.idCueSelected = ++this.idCueSelected; // sumamos uno para saltar a la cue siguiente
-    //       // console.log(this.idCueSelected);
-    //     }
-
-    //     if (this.contents.length >= this.idCueSelected) { // si es la última cue
-    //         this.cueSelected = undefined; // reseteamos el go
-    //         this.claseGo = 'btn h-100 btn-outline-primary btn-block'; // volvemos la class al estado normal
-    //     }
-    //   }
-    // } else {
-    //   // console.log('go sin id');
-    //   return;
-    // }
  }
  resetGo(): void{ // no implementada por ahora
     console.log('reset');
     this.idCueSelected = 0;
     this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
+ }
+ stop(){
+  // this.oscService.stop();
+  console.log('stop');
+  const messageStop = new OSC.Message('/engine/command/stop');
+  const binaryStop = messageStop.pack();
+  this.wsRealtime.next(binaryStop);
  }
 
  selectCue( id: number ): void{ // cuando seleccionamos una cue
@@ -994,22 +1067,26 @@ initMode(value): void{
     this.edit.mode = false;
     this.proService.changeEditing(this.edit);
   } else if (value === 'show') {
-    this.edit.mode = true;
-    this.proService.changeEditing(this.edit);
+    // this.edit.mode = true;
+    // this.proService.changeEditing(this.edit);
     // this.proService.projectReady(this.cueMs.uuid);
+    this.proService.projectReady(this.cueMs.uuid);
   }
 }
  Mode(): void{
   if (this.edit.mode) {
+    this.proService.projectLoad(this.cueMs.uuid);
+    // console.log('edit');
+    this.wsRealtime.unsubscribe(); // desuscribimos del realtime
     this.proService.changeEditing(this.edit);
     this.edit.mode = !this.edit.mode;
     this.readyGo = false;
+    // console.log(this.edit.mode);
+    
   } else {
-    this.proService.changeEditing(this.edit);
-    this.edit.mode = !this.edit.mode;
-    // console.log(this.project.CuemsScript.uuid);
-    // this.proService.projectReady(this.cueMs.uuid);
-    this.readyGo = true;
+    // this.proService.changeEditing(this.edit);
+    // this.edit.mode = !this.edit.mode;
+    this.proService.projectReady(this.cueMs.uuid);
   }
 
  }
@@ -1048,7 +1125,10 @@ initMode(value): void{
 
  editCueDialog(): void {
 //  console.log(this.mediaList);
- let Media;
+if (this.edit.mode) { // si no estamos en modo edit 
+  
+} else {
+  let Media;
 
  if (this.idCueSelected !== undefined) {
   const tipo = this.tipoCue[this.idCueSelected];
@@ -1157,6 +1237,7 @@ initMode(value): void{
 
       });
  }
+}
 
  }
 

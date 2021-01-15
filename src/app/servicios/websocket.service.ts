@@ -21,17 +21,21 @@ export class WebsocketService {
     }
   });
 
-// Conexion websocket deserialized
-  public wsBlob = webSocket({
-    url: this.host
-  });
+// // Conexion websocket deserialized
+//   public wsRealtime = webSocket({
+//     url: this.hostRealtime
+//   });
   constructor() {
     this.ws.subscribe(); // nos subscribimos al servidor
+    // this.wsRealtime.subscribe();
 }
 
   wsEmit(msg: any): void {
   this.ws.next(msg); // emitimos el mensage por el ws
 }
+// barra(): void {
+//   this.ws.next('/'); // emitimos el mensage por el ws
+// }
 // wsBlobEmit(msg: any): void {
 //   this.wsBlob.next(msg); // emitimos el mensage por el ws
 // }

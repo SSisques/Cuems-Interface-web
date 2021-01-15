@@ -134,15 +134,15 @@ export class MediaComponent implements OnInit {
      });
   }
   thumbnail(uuid): void{
-    this.wsService.wsBlob.subscribe(msg => {
-      if (msg instanceof Blob) {
-        console.log(msg);
-      }
-      // console.log(msg);
-    });
-    this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid});
-    // this.fileService.files_LoadThumbnail(uuid);
-    // console.log(uuid);
+    // this.wsService.wsBlob.subscribe(msg => {
+    //   if (msg instanceof Blob) {
+    //     console.log(msg);
+    //   }
+    //   // console.log(msg);
+    // });
+    // this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid});
+    // // this.fileService.files_LoadThumbnail(uuid);
+    // // console.log(uuid);
     
   }
   // selecciones

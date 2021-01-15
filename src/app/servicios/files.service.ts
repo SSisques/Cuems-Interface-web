@@ -14,9 +14,9 @@ export class FilesService {
   files_Trash_List(): void {
     this.wsService.ws.next({action: 'file_trash_list'}); // llamamos a la lista de files en la papelera
   }
-  files_LoadThumbnail(uuid): void {
-    this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid}); // llamamos al thumbnail del archivo
-  }
+  // files_LoadThumbnail(uuid): void {
+  //   this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid}); // llamamos al thumbnail del archivo
+  // }
   file_LoadMeta(uuid): void {
     this.wsService.ws.next({action: 'file_load_meta', value: uuid}); // llamamos al la metadata del archivo
   }

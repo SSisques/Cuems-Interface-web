@@ -31,7 +31,7 @@
                             "node_modules/jquery/dist/jquery.slim.min.js",
                             "node_modules/popper.js/dist/umd/popper.min.js",
                             "node_modules/bootstrap/dist/js/bootstrap.min.js",
-                            "node_modules/osc-js/lib/osc-browser.min.js",
+                            "node_modules/osc-js/lib/osc.js",
                             "node_modules/js-cookie/src/js.cookie.js"
                         ]
                     },

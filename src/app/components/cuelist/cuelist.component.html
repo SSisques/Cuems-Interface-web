@@ -36,7 +36,7 @@
                         <button mat-button matTooltip="Create a new action cue" (click)="addCue('action')" disabled><mat-icon>radio_button_checked</mat-icon></button>
                         <button mat-button matTooltip="Create a new group cue" (click)="addCue('cuelist')" disabled><mat-icon>folder_open</mat-icon></button>
 
-                        <button mat-button matTooltip="Reset for strat from top" (click)="loadTmp()">ResetAll</button>
+                        <button mat-button matTooltip="" (click)="stop()">StopAll</button>
 
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                                                 {{ cue[tipoCue[i]].name }}
                                         </span>
                                         <span  class="float-right">
-                                            {{ cue[tipoCue[i]].prewait.CTimecode }} | {{ duration(i) }} | {{ cue[tipoCue[i]].postwait.CTimecode }}
+                                            <!-- {{ cue[tipoCue[i]].prewait.CTimecode }} | {{ duration(i) }} | {{ cue[tipoCue[i]].postwait.CTimecode }} -->
                                             
                                             <button mat-icon-button matTooltip="Cue opcions" [matMenuTriggerFor]="contMenu" aria-label="Example icon-button with a menu">
                                                 <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'pause'">keyboard_arrow_down</mat-icon>

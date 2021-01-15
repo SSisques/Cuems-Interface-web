@@ -85,6 +85,10 @@ projectReady(uuid: string): void { // nos ponemos en modo ejecución
   this.wsService.wsEmit({action: 'project_ready', value: uuid});
   // console.log('Cargamos desde el servidor el proyecto uuid', uuid);
 }
+projectLoad(uuid: string): void { // nos ponemos en modo edit
+  this.wsService.wsEmit({action: 'project_load', value: uuid});
+  // console.log('Cargamos desde el servidor el proyecto uuid', uuid);
+}
 duplicateFromServer(uuid: string): void {
   this.wsService.wsEmit({action: 'project_duplicate', value: uuid});
 }
