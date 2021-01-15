@@ -76,17 +76,14 @@ export class CueListComponent implements OnInit, AfterViewInit {
             // console.log(msg.args[0]);
           break;
           case '/engine/status/nextcue':
-            // console.log('next cue');
-            // console.log(msg.args[0]);
-            // this.nextCue = msg.args[0];
-            // console.log(msg.args[0]);
+            console.log(msg.args[0]);
             for (let index = 0; index < this.cueMs.CueList.contents.length; index++) {
               const element = this.cueMs.CueList.contents[index];
               const uuid = element[this.tipoCue[index]].uuid;
               // console.log(index);
               if (uuid === msg.args[0]) {
                 this.idCueSelected = index; // asignamos la nueva posición del cursor en el cuelist
-                // console.log(index);
+                // console.log(msg.args[0]);
               }
             }
             // si recibo blanco hemos llegado al final
@@ -107,8 +104,8 @@ export class CueListComponent implements OnInit, AfterViewInit {
 
       } else {
         let json = JSON.parse(mess.data);
-        // this.FULL_PATH = json;
-        // console.log(this.FULL_PATH.CONTENTS.engine.CONTENTS.status.CONTENTS.nextcue);
+        this.FULL_PATH = json;
+        // console.log(this.FULL_PATH.CONTENTS.engine.CONTENTS);
         // this.nextCue = this.FULL_PATH.CONTENTS.engine.CONTENTS.status.CONTENTS.nextcue.VALUE; // actualizamos la next cue desde el full_path cuando lo pedimos
       }
     }
@@ -984,6 +981,13 @@ duration(cue): string{
   const messageStop = new OSC.Message('/engine/command/stop');
   const binaryStop = messageStop.pack();
   this.wsRealtime.next(binaryStop);
+ }
+ resetAll(){
+  // this.oscService.stop();
+  console.log('resetAll');
+  const messageReset = new OSC.Message('/engine/command/resetall');
+  const binaryReset = messageReset.pack();
+  this.wsRealtime.next(binaryReset);
  }
 
  selectCue( id: number ): void{ // cuando seleccionamos una cue
