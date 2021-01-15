@@ -52,8 +52,10 @@ export class CueListComponent implements OnInit, AfterViewInit {
                 }
     FULL_PATH: any[] = [];
     nextCue; 
+    timecode;
    // Conexion websocket deserialized
-   public wsRealtime = webSocket({
+   
+  wsRealtime = webSocket({
     url: 'wss://dev.stagelab.net/realtime',
     deserializer: (data: any) => this.in_message(data),
     serializer: (msg: any) => msg,
@@ -67,7 +69,7 @@ export class CueListComponent implements OnInit, AfterViewInit {
         const msg = new OSC.Message();
         msg.unpack(dataView);
 
-          // console.log(dataView);
+          // console.log(msg);
         switch (msg.address) {
           case '/engine/status/currentcue':
             // console.log('current cue');
@@ -92,6 +94,11 @@ export class CueListComponent implements OnInit, AfterViewInit {
               this.unselectCue();
             }
             
+          break;
+          case '/engine/status/timecode':
+            this.timecode = parseInt(msg.args[0], 10);
+            this.timecode = this.timecode / 1000;
+            // console.log(this.timecode);
           break;
         
           default:

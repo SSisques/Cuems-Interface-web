@@ -28,6 +28,7 @@
                 <!-- Menú -->
                 <div class="row justify-content-around">
                     <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
+                    <mat-progress-bar mode="determinate" [value]="timecode"></mat-progress-bar>
                     <div class="col-12 m-1 p-2 border bg-light text-center">
 
                         <button mat-button matTooltip="Create a new audio cue" [disabled]="edit.mode" (click)="addCue('AudioCue')"><mat-icon>volume_up</mat-icon></button>
