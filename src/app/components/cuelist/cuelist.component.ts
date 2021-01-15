@@ -1077,7 +1077,7 @@ initMode(value): void{
   if (this.edit.mode) {
     this.proService.projectLoad(this.cueMs.uuid);
     // console.log('edit');
-    this.wsRealtime.unsubscribe(); // desuscribimos del realtime
+    // this.wsRealtime.unsubscribe(); // desuscribimos del realtime
     this.proService.changeEditing(this.edit);
     this.edit.mode = !this.edit.mode;
     this.readyGo = false;
