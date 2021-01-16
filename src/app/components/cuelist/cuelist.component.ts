@@ -343,11 +343,12 @@ readyGo = false;
         // console.log(recibo.value);
         if (recibo.value === this.cueMs.uuid){
           this.proService.changeEditing(this.edit); // enlace con navbar posicionamiento en modo edit
-          this.edit.mode = !this.edit.mode; // conmutamos al modo en modo edit
+          this.edit.mode = true; // conmutamos al modo en modo edit
           this.realTime(); // ya podemos conectarnos al realtime
           // this.recibimosRealtime();
           this.readyGo = true; // activar la posibilidad de hacer go cuando reciba ok
           this.idCueSelected = 0; // seleccionar la cue 0 resetall
+          this.claseGo = 'btn h-100 btn-primary btn-block';
         }
         const options = {
           autoClose: true
@@ -961,14 +962,18 @@ duration(cue): string{
 
  go(): void{ // cuando hacemos go
 
-  // this.oscService.envioGo();
-  console.log('go'); // añadir el runig cue aquí
-      const messageGo = new OSC.Message('/engine/command/go');
-      const binaryGo = messageGo.pack();
-      this.wsRealtime.next(binaryGo);
-      // console.log(this.cueMs.CueList.contents);
-      
-
+  if (this.edit.mode === true) { // si estamos en modo show
+    // this.oscService.envioGo();
+console.log('go'); // añadir el runig cue aquí
+const messageGo = new OSC.Message('/engine/command/go');
+const binaryGo = messageGo.pack();
+this.wsRealtime.next(binaryGo);
+// console.log(this.cueMs.CueList.contents);
+  
+  } else {
+    this.claseGo = 'btn h-100 btn-danger btn-block'; // Go en color rojo
+    setTimeout(() => { this.claseGo = 'btn h-100 btn-outline-danger btn-block'; }, 500);
+  }
  }
  resetGo(): void{ // no implementada por ahora
     console.log('reset');
@@ -991,10 +996,19 @@ duration(cue): string{
  }
 
  selectCue( id: number ): void{ // cuando seleccionamos una cue
-  this.idCueSelected = id; // asignamos la id de la cue a actualizar para usarla en el submit
-  // console.log('preLoad cue ' + id); // Falta!!! precargamos la cue en el servidor
-   // this.cueSelected = true; // hemos seleccionado una cue
-  this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
+  if (this.edit.mode === true) { // si estamos en modo show
+    
+    this.idCueSelected = id; // asignamos la id de la cue a actualizar para usarla en el submit
+    this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
+  
+  } else {
+
+    this.idCueSelected = id; // asignamos la id de la cue a actualizar para usarla en el submit
+    // this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
+    
+  }
+
+
  }
  cueSelectedMove(operacion: string): void { // seleccion con las flechas del treclado
   if ( this.idCueSelected >= this.contents.length ) {
@@ -1077,11 +1091,9 @@ initMode(value): void{
   if (value === 'edit') {
     this.edit.mode = false;
     this.proService.changeEditing(this.edit);
+    this.claseGo = 'btn h-100 btn-outline-danger btn-block';
   } else if (value === 'show') {
-    // this.edit.mode = true;
-    // this.proService.changeEditing(this.edit);
-    // this.proService.projectReady(this.cueMs.uuid);
-    this.proService.projectReady(this.cueMs.uuid);
+    this.proService.projectReady(this.edit.uuid);
   }
 }
  Mode(): void{
@@ -1092,11 +1104,10 @@ initMode(value): void{
     this.proService.changeEditing(this.edit);
     this.edit.mode = !this.edit.mode;
     this.readyGo = false;
+    this.claseGo = 'btn h-100 btn-outline-danger btn-block';
     // console.log(this.edit.mode);
     
   } else {
-    // this.proService.changeEditing(this.edit);
-    // this.edit.mode = !this.edit.mode;
     this.proService.projectReady(this.cueMs.uuid);
   }
 
@@ -1136,7 +1147,7 @@ initMode(value): void{
 
  editCueDialog(): void {
 //  console.log(this.mediaList);
-if (this.edit.mode) { // si no estamos en modo edit 
+if (this.edit.mode === true) { // si no estamos en modo edit 
   
 } else {
   let Media;
