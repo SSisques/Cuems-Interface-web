@@ -57,14 +57,14 @@ export class EditCueComponent implements OnInit {
       switch (this.typeCue) {
           case 'AudioCue':
             for (const file of data.mediaList) {
-              if (file.type === 'audio') {
+              if (file.type === 'AUDIO') {
                 this.mediaList.push( file );
               }
             }
             break;
           case 'VideoCue':
             for (const file of data.mediaList) {
-              if (file.type === 'movie' || file.type === 'image') {
+              if (file.type === 'MOVIE' || file.type === 'IMAGE') {
                 this.mediaList.push( file );
               }
             }

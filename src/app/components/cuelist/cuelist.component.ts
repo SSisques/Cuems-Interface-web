@@ -725,7 +725,7 @@ duration(cue): string{
             master_vol: 80, // 0 a 100 que afecta a todas las salidas
             Outputs: [
               { AudioCueOutput: {
-                output_name: 'salida_001',
+                output_name: 'default',
                 output_vol: 80,
                 channels: [{
                   channel: {
