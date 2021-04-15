@@ -75,12 +75,14 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { DropComponent } from './components/drop/drop.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { PreferencesComponent } from './components/preferences/preferences.component';
+import { DessingComponent } from './components/dessing/dessing.component';
 
 // Directivas
 import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 import { ClickOutsideDirective } from './click-outside.directive';
 import { UnixNamePipe } from './pipes/unix-name.pipe';
-import { NewProjectComponent } from './components/new-project/new-project.component'; // click outside
+import { NewProjectComponent } from './components/new-project/new-project.component';
+
 
 
 
@@ -106,7 +108,9 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     PreferencesComponent,
     NgDropFilesDirective,
     UnixNamePipe,
-    NewProjectComponent
+    NewProjectComponent,
+    DessingComponent,
+    
   ],
   imports: [
     BrowserModule,

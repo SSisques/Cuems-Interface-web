@@ -14,6 +14,7 @@ export class UploadService {
 
 
   private wsUpload = 'wss://dev.stagelab.net/upload';
+  // private wsUpload = 'wss://master.local/upload';
 
   constructor( ) { }
 

@@ -4,11 +4,11 @@
 html,
 body {
     height: 100%;
-}
-
-body {
     padding-bottom: 50px;
-    /* background-color: slategray; */
+    font-family: Roboto, sans-serif;
+    /* color: #cfd4db; */
+    color: #717b8a;
+    background-color: #1d2329;
 }
 
 footer {
@@ -46,15 +46,21 @@ footer {
     display: none
 }
 
-#messageArea {
+.icon-dashboard {
+    background-image: url("./assets/img/ico_dashboard.png");
+    background-position: center center;
+}
+
+
+/* #messageArea {
     color: #fff;
     background-color: #aaa;
     border-radius: 10px;
     padding-left: 0.75em;
     padding-top: 0.1em;
     height: 93%;
-    /* width: 98%; */
-}
+    width: 98%;
+} */
 
 .example-box {
     /* width: 50px; */

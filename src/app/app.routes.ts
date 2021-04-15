@@ -9,6 +9,7 @@ import { ProyectosComponent } from './components/proyectos/proyectos.component';
 import { MediaComponent } from './components/media/media.component';
 import { DropComponent } from './components/drop/drop.component';
 import { TreeComponent } from './components/tree/tree.component';
+import { DessingComponent } from "./components/dessing/dessing.component";
 
 
 
@@ -21,6 +22,7 @@ const APP_ROUTES: Routes = [
     { path: 'media', component: MediaComponent },
     { path: 'drop', component: DropComponent },
     { path: 'tree', component: TreeComponent },
+    { path: 'dessing', component: DessingComponent },
     // le enviamos recibimos el id del componente con /:
     { path: '**', pathMatch: 'full', redirectTo: 'proyectos' }
 ];
