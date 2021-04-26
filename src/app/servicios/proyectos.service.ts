@@ -3,6 +3,7 @@ import { WebsocketService } from './websocket.service';
 import { BehaviorSubject } from 'rxjs';
 import { v1 as uuidv1 } from 'uuid'; // importamos el generador v1 de uuid https://www.npmjs.com/package/uuid
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -237,6 +238,7 @@ export interface TimelinePosition {
 export interface CTimecode {
   CTimecode: string;
  }
+
 
  // export interface DmxScene {
 //   uuid: string; // *

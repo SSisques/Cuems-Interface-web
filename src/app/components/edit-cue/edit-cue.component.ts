@@ -20,6 +20,9 @@ export class EditCueComponent implements OnInit {
     }
   ];
 
+  outputs: any[] = [];
+  defaultOutput: any;
+
   isMedia;
   mediaContent: false;
 
@@ -27,6 +30,7 @@ export class EditCueComponent implements OnInit {
   loopTimes: number;
   typeCue: string;
   newCue: boolean;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -61,13 +65,36 @@ export class EditCueComponent implements OnInit {
                 this.mediaList.push( file );
               }
             }
+
+            this.defaultOutput = data.audioOutputList[0];
+            this.outputs = data.audioOutputList;
+
+            // for (let index = 1; index < data.audioOutputList.length; index++) {
+            //   this.audioOutputs.push( data.audioOutputList[index].name );
+            //   // this.audioOutputs = data.audioOutputList[index].name;
+            // }
+            
+            console.log(this.defaultOutput);
+            // console.log(this.outputs);
+            // console.log(data.audioOutputList);
+            
+            
+            // console.log(this.outputName);
+            
+            
             break;
           case 'VideoCue':
             for (const file of data.mediaList) {
               if (file.type === 'MOVIE' || file.type === 'IMAGE') {
                 this.mediaList.push( file );
+                // this.defaultOutput = data.videoOutputList[0].name;
               }
             }
+            this.defaultOutput = data.videoOutputList[0];
+            this.outputs = data.videoOutputList;
+            console.log(this.outputs);
+            
+            
             break;
           case 'DmxCue':
             console.log('Esperando a listar las memorias de luces');
@@ -90,8 +117,10 @@ export class EditCueComponent implements OnInit {
           media      : [null, ],
           in_time    : ['00:00:00.000', ],
           out_time   : ['', ],
-          duration      : ['', ]
+          duration   : ['', ],
+          output_name: [this.defaultOutput.output, ]
       });
+      
 
       } else {
         let fileName = 'Sin media';
@@ -123,8 +152,11 @@ export class EditCueComponent implements OnInit {
               media      : [fileName, ],
               in_time    : [inTime, ],
               out_time   : [outTime, ],
-              duration   : ['', ]
+              duration   : ['', ],
+              output_name: [data.output_name, ]
             });
+            // console.log(this.outputName);
+            
 
         // } else {
         //   this.editForm = this.fb.group({  // group es un objeto de javascript literal
@@ -162,6 +194,19 @@ export class EditCueComponent implements OnInit {
       this.editForm.controls['out_time'].setValue( '00:00:00.000' );
     }
   }
+  // nodo_Outpout(out): void{
+  //   // console.log(this.mediaList);
+
+  //   const outAsigned = this.outputs.find( Out => Out.name === out );
+  //   console.log(outAsigned);
+  //   this.editForm.controls['output_name'].setValue(outAsigned.name);
+
+  // }
+  // output_Load(): void{
+  //   if () {
+      
+  //   }
+  // }
   duration(inTime, outTime): void{
 
       const End = this.toMillis(outTime);
@@ -234,14 +279,15 @@ save(): void {
       this.editForm.value.loop = 0;
     }
   if (this.editForm.value.loop === 'uno') {
-      if (this.editForm.value.loop_times > 1) {
+      // if (this.editForm.value.loop_times > 1) {
         this.editForm.value.loop = this.editForm.value.loop_times;
-      } else {
-        this.editForm.value.loop = 1;
-      }
+      // } else {
+      //   this.editForm.value.loop = 1;
+      // }
     }
     // console.log(this.editForm.value);
   this.dialogRef.close(this.editForm.value);
+
 }
 close(): void {
   this.dialogRef.close('close');

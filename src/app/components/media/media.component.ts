@@ -71,7 +71,7 @@ export class MediaComponent implements OnInit {
             modified: recibo.value[index][this.myFileUuid[index]].modified,
             in_projects: recibo.value[index][this.myFileUuid[index]].in_projects,
             in_trash_projects: recibo.value[index][this.myFileUuid[index]].in_trash_projects,
-            type: recibo.value[index][this.myFileUuid[index]].type
+            // type: recibo.value[index][this.myFileUuid[index]].type
            });
 
           }
@@ -101,7 +101,7 @@ export class MediaComponent implements OnInit {
             modified: recibo.value[index][this.myTrashFileUuid[index]].modified,
             in_projects: recibo.value[index][this.myTrashFileUuid[index]].in_projects,
             in_trash_projects: recibo.value[index][this.myTrashFileUuid[index]].in_trash_projects,
-            type: recibo.value[index][this.myFileUuid[index]].type
+            type: recibo.value[index][this.myFileUuid[index]].type  
            });
 
           }
@@ -348,5 +348,54 @@ export class MediaComponent implements OnInit {
  limpiarArchivos(): void {
     this.archivosComponent = [];
  }
+
+//  remplazarArchivos(): void {
+
+//   let index: number;
+//   let listaBorrado: string[];
+//   const dialogConfig = new MatDialogConfig();
+//   dialogConfig.disableClose = true;
+//   dialogConfig.autoFocus = true;
+//   dialogConfig.height = '200px';
+//   dialogConfig.width = '300px';
+
+//   dialogConfig.data = {
+//     name: 'Esta a punto de reemplazar uno o varios archivos',
+//     msg: 'Confirmamos?'
+// };
+
+//   const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+
+//   dialogRef.afterClosed().subscribe(
+//       data => {
+//         if (data === true) {
+//           // console.log('confirmado');
+//           // console.log(this.filesList);
+          
+
+//           for (const newfile of this.archivosComponent) {
+
+//             // console.log(newfile.file.name);
+
+//           for (const oldfile of this.filesList) {
+            
+//             if (newfile.file.name === oldfile.name) {
+
+//               console.log(oldfile.uuid);
+//               // borramos los archivos
+//               index = this.filesList.findIndex(file => file.uuid === oldfile.uuid ); // leemos el index de la uuid
+//               // this.filesList.splice(index, 1); // borramos del array local
+//               // this.fileService.file_deleteFromServer(oldfile.uuid); // borramos del servidor
+//               // console.log('borrados archivos');
+//             }
+              
+//             }
+            
+//           }
+//           // cargamos los nuevos archivos  xº
+          
+//         }
+//       });
+//  }
 
 }

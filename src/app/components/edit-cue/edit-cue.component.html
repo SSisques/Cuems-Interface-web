@@ -59,7 +59,7 @@
             {{ mediaContent }}
             <br>
             <mat-form-field appearance="fill">
-                <mat-label>Selector de media</mat-label>
+                <mat-label>Media</mat-label>
                 <mat-select formControlName="media" (selectionChange)="file_LoadMeta($event.value)">
                     <mat-option *ngFor="let files of mediaList" [value]="files.unix_name">{{ files.unix_name}}</mat-option>
                 </mat-select>
@@ -75,6 +75,14 @@
                 <input matInput formControlName="out_time" (blur)="duration(editForm.value.in_time, editForm.value.out_time)" (keyup)="handleKeyUp($event)">
             </mat-form-field>
             <br>
+            <mat-form-field appearance="fill">
+                <mat-label>Salida</mat-label>
+                <mat-select formControlName="output_name">
+                    <!-- (selectionChange)="nodo_Outpout($event.value)" -->
+                    <mat-option *ngFor="let out of outputs" [value]="out.output">{{ out.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            &nbsp;
             <mat-form-field appearance="outline">
                 <mat-label>Duration</mat-label>
                 <input matInput formControlName="duration" (keyup)="handleKeyUp($event)">

@@ -5,6 +5,7 @@ import { OscService } from '../../servicios/osc.service'; // importamos el servi
 import { WebsocketService } from '../../servicios/websocket.service';
 import { ProyectosService, CuemsProject, CuemsScript, CueList, AudioCue, Contents } from '../../servicios/proyectos.service';
 import { FilesService, FileList} from '../../servicios/files.service';
+import { NodesService, NodeList } from '../../servicios/nodes.service'; // importamos el servicio osc
 import { v1 as uuidv1 } from 'uuid'; // importamos el generador v1 de uuid https://www.npmjs.com/package/uuid
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AlertService } from '../../_alert';
@@ -33,6 +34,7 @@ export class CueListComponent implements OnInit, AfterViewInit {
               private wsService: WebsocketService,
               private proService: ProyectosService,
               private fileService: FilesService,
+              private nodesService: NodesService,
               private fb: FormBuilder,
               public alertService: AlertService,
               private dialog: MatDialog
@@ -144,7 +146,8 @@ export class CueListComponent implements OnInit, AfterViewInit {
 
 readyGo = false;
  claseGo = 'btn h-100 btn-outline-primary btn-block'; // clase del botton go
-
+ color_despligue = 'primary'; // clase del botón despliegue
+despligue_state = false;
  cueSelected = false;
  idCueSelected: number = undefined;
  idCueFordelete: number = undefined;
@@ -219,6 +222,21 @@ readyGo = false;
     contents: []
     }
  };
+
+ public nodeList: NodeList = { // Listado de nodos y salidas
+  
+  number_of_nodes: 0, 
+	default_audio_input: '', 
+	default_audio_output: '', 
+	default_video_input: '', 
+	default_video_output: '', 
+	default_dmx_input: '', 
+	default_dmx_output: '', 
+	nodes: []
+ };
+
+ audioOutputList: any[] = [];
+ videoOutputList: any[] = [];
 
  contents: Contents[] = [];
 
@@ -319,6 +337,48 @@ readyGo = false;
            });
       }
         break;
+    }
+        case 'initial_mappings': {
+          // console.log(recibo.value);
+          const nodeList = recibo.value; // parseamos la entada
+
+          for (let index = 0; index < recibo.value.nodes.length; index++) {
+
+            this.audioOutputList.push({
+              // uuid: recibo.value.nodes[index].uuid,
+              output: recibo.value.default_audio_output,
+              name: 'Nodo ' + index + ' salida por defecto'  });
+
+            this.videoOutputList.push({
+              // uuid: recibo.value.nodes[index].uuid,
+              output: recibo.value.default_video_output,
+              name: 'Nodo ' + index + ' salida por defecto'});
+
+            for (let index2 = 0; index2 < recibo.value.nodes[index].audio.outputs.length; index2++) {
+
+              this.audioOutputList.push({ // hacemos el push de los proyectos al listado
+              //uuid: recibo.value.nodes[index].uuid,
+              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].audio.outputs[index2].name,
+              name: 'Nodo ' + index + ' salida ' + index2
+              });
+
+            }
+            for (let index2 = 0; index2 < recibo.value.nodes[index].video.outputs.length; index2++) {
+
+              this.videoOutputList.push({ // hacemos el push de los proyectos al listado
+              //uuid: recibo.value.nodes[index].uuid,
+              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].video.outputs[index2].name,
+              name: 'Nodo ' + index + ' salida ' + index2
+              });
+
+            }
+        }
+
+          // console.log(this.audioOutputList);
+          // console.log(this.videoOutputList);
+           
+      // }
+          break;
      }
         case 'project_save': {
 
@@ -356,6 +416,18 @@ readyGo = false;
         this.alertService.success('Engine Activo ', options);
         break;
      }
+     case 'project_deploy': {
+      // console.log(recibo.value);
+      const options = {
+        autoClose: false
+      };
+      if (recibo.vale === this.cueMs.uuid) {
+        this.alertService.success('Despliqgue realizado ', options);
+        this.despligue_state = true;
+      }
+      
+      break;
+   }
   //    case 'project_load': {
        
   //     // console.log(recibo.value);
@@ -621,11 +693,13 @@ duration(cue): string{
   dialogConfig.width = '800px';
 
   dialogConfig.data = {
-       loop: 1,
-       newCue: true,
-       typeCue: type,
-       mediaContent: true,
-       mediaList: this.mediaList
+      loop: 1,
+      newCue: true,
+      typeCue: type,
+      mediaContent: true,
+      mediaList: this.mediaList,
+      audioOutputList: this.audioOutputList,
+      videoOutputList: this.videoOutputList
    };
 
   const dialogRef = this.dialog.open(EditCueComponent, dialogConfig);
@@ -637,6 +711,8 @@ duration(cue): string{
         return;
       } else {
 
+        this.color_despligue = 'warn'; // resaltamos alerta de despligue
+
         const newName = data.name;
         const newDescription = data.description;
         const newPrewait = data.prewait;
@@ -646,6 +722,8 @@ duration(cue): string{
         const newMediaName = data.media;
         const newInTime = data.in_time;
         const newOutTime = data.out_time;
+        const newOutputName = data.output_name; 
+        
 
         if (newMediaName !== null) {
           Media = {
@@ -653,7 +731,7 @@ duration(cue): string{
             regions: [{
               region: {
               id: 0,
-              loop: 1, // 0 infinito, 1 desactivado o número de loops - implementarlo
+              loop: newLoop, // 0 infinito, 1 desactivado o número de loops - implementarlo
               in_time: { CTimecode: newInTime }, // tiempo de inicio de cue - leo el metadata y pasa y lo aplico al in out
               out_time: { CTimecode: newOutTime }
             }
@@ -664,7 +742,7 @@ duration(cue): string{
           Media = null;
         }
 
-        // comprar duplicidad de uuids
+        // comprobar duplicidad de uuids
         const checkedUuid = uuidv1();
         let uuidDuplicada = false;
         let id;
@@ -725,7 +803,7 @@ duration(cue): string{
             master_vol: 80, // 0 a 100 que afecta a todas las salidas
             Outputs: [
               { AudioCueOutput: {
-                output_name: 'default',
+                output_name: newOutputName,
                 output_vol: 80,
                 channels: [{
                   channel: {
@@ -738,6 +816,7 @@ duration(cue): string{
             ]
           }
         };
+        
         break;
         case 'VideoCue':
         newCue = {
@@ -765,7 +844,7 @@ duration(cue): string{
               Media,
             Outputs: [
               { VideoCueOutput: {
-                output_name: 'salida_001',
+                output_name: newOutputName,
                 output_geometry: {
                   x_scale: 0, // * Bloquearlo en la ui para poder editarlos unidos o independientes
                   y_scale: 0, // *
@@ -994,6 +1073,23 @@ this.wsRealtime.next(binaryGo);
   const binaryReset = messageReset.pack();
   this.wsRealtime.next(binaryReset);
  }
+ despliegue(){
+   if (this.despligue_state) {
+    console.log('despliegue en teario realizado, volvemos a enviar la orden');
+    this.wsService.wsEmit({action: 'project_deploy', value: this.cueMs.uuid});
+     
+   } else {
+    console.log('despliegue');
+    this.wsService.wsEmit({action: 'project_deploy', value: this.cueMs.uuid});
+   }
+  
+
+ }
+ hw_discovery(){
+  console.log('forzamos busqueda de nodos');
+  this.wsService.wsEmit({action: 'hw_discovery'});
+
+ }
 
  selectCue( id: number ): void{ // cuando seleccionamos una cue
   if (this.edit.mode === true) { // si estamos en modo show
@@ -1156,8 +1252,19 @@ if (this.edit.mode === true) { // si no estamos en modo edit
   const tipo = this.tipoCue[this.idCueSelected];
   const commonProperties = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]];
   const callMedia = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Media;
+  const outPuts = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Outputs[0];
+  let output_name;
+  
   // console.log(commonProperties.description);
   // let cueMedia = false;
+
+// console.log(audioOutput_name);
+    if (tipo === 'AudioCue' ) {
+      output_name = outPuts.AudioCueOutput.output_name;
+    } else if (tipo === 'VideoCue' ) {
+      output_name = outPuts.VideoCueOutput.output_name;
+    }
+// console.log(output_name);
 
 
   // if (tipo === 'AudioCue' || tipo === 'VideoCue' || tipo === 'DmxCue') {
@@ -1187,9 +1294,13 @@ if (this.edit.mode === true) { // si no estamos en modo edit
       loop        : commonProperties.loop,
       post_go     : commonProperties.post_go,
       media       : callMedia,
+      output_name : output_name,
+  
       // in_time     : region.in_time.CTimecode,
       // out_time    : region.out_time.CTimecode,
       mediaList   : this.mediaList,
+      audioOutputList: this.audioOutputList,
+      videoOutputList: this.videoOutputList,
       typeCue     : tipo
   };
 
@@ -1217,13 +1328,18 @@ if (this.edit.mode === true) { // si no estamos en modo edit
           return;
         } else {
 
+          this.color_despligue = 'warn'; // resaltamos alerta de despligue
+
+          // console.log(data.output_name);
+          
+
           if (data.media !== null && data.media !== 'Sin media') {
             Media = {
-              file_name: data.media,
+              file_name: data.media,  
               regions: [{
                 region: {
                 id: 0,
-                loop: 1, // 0 infinito, 1 desactivado o número de loops - implementarlo
+                loop: data.loop, // 0 infinito, 1 desactivado o número de loops - implementarlo
                 in_time: { CTimecode: data.in_time }, // tiempo de inicio de cue - leo el metadata y pasa y lo aplico al in out
                 out_time: { CTimecode: data.out_time }
               }
@@ -1243,6 +1359,11 @@ if (this.edit.mode === true) { // si no estamos en modo edit
           commonProperties.loop = data.loop;
           commonProperties.post_go = data.post_go;
           commonProperties.Media = Media;
+          if (tipo === 'AudioCue' ) {
+            outPuts.AudioCueOutput.output_name = data.output_name;
+          } else if (tipo === 'VideoCue' ) {
+            outPuts.VideoCueOutput.output_name = data.output_name;
+          }
 
             // Media.file_name = data.media;
           // } else {
@@ -1254,7 +1375,7 @@ if (this.edit.mode === true) { // si no estamos en modo edit
           // }
           this.proyectoEditado();
         //  console.log('la media que llega al cuelist' + data.media);
-          // console.log(this.contents);
+          console.log(this.contents);
         }
 
       });

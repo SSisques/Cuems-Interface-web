@@ -55,6 +55,7 @@ import { ProyectosService } from './servicios/proyectos.service';
 import { UploadService } from './servicios/upload.service';
 import { FilesService } from './servicios/files.service';
 import { PreferenciasService } from './servicios/preferencias.service';
+import { NodesService } from './servicios/nodes.service';
 
 
 
@@ -146,7 +147,8 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     ProyectosService,
     UploadService,
     FilesService,
-    PreferenciasService
+    PreferenciasService,
+    NodesService
   ],
   bootstrap: [AppComponent],
   entryComponents: [
