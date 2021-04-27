@@ -24,9 +24,9 @@
                             "src/assets"
                         ],
                         "styles": [
-                            "./node_modules/bootstrap/dist/css/bootstrap.css",
+                            "./node_modules/bootstrap/scss/bootstrap.scss",
                             "src/fonts/Roboto.css",
-                            "src/styles.css"
+                            "src/styles.scss"
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.slim.min.js",
@@ -127,5 +127,11 @@
             }
         }
     },
-    "defaultProject": "cuems"
+    "defaultProject": "cuems",
+    "schematics": {
+      "@schematics/angular:component": {
+        "styleext": "scss"
+      }
+    }
+
 }
