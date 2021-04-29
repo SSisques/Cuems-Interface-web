@@ -71,7 +71,7 @@ export class MediaComponent implements OnInit {
             modified: recibo.value[index][this.myFileUuid[index]].modified,
             in_projects: recibo.value[index][this.myFileUuid[index]].in_projects,
             in_trash_projects: recibo.value[index][this.myFileUuid[index]].in_trash_projects,
-            // type: recibo.value[index][this.myFileUuid[index]].type
+            type: recibo.value[index][this.myFileUuid[index]].type
            });
 
           }

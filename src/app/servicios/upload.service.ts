@@ -13,8 +13,8 @@ import * as CryptoJS from 'crypto-js';
 export class UploadService {
 
 
-  private wsUpload = 'wss://dev.stagelab.net/upload';
-  // private wsUpload = 'wss://master.local/upload';
+  // private wsUpload = 'wss://dev.stagelab.net/upload';
+  private wsUpload = 'wss://127.0.0.1/upload';
 
   constructor( ) { }
 

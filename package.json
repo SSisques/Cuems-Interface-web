@@ -34,6 +34,7 @@
     "jquery": "^3.5.1",
     "jquery.js": "0.0.2-security",
     "js-cookie": "^2.2.1",
+    "material-design-icons": "^3.0.1",
     "ng-keyboard-shortcuts": "^10.1.16",
     "osc-js": "^2.1.0",
     "popper": "^1.0.1",

@@ -7,8 +7,8 @@ import { webSocket } from 'rxjs/webSocket';
 })
 export class WebsocketService {
 
-  private host = 'wss://dev.stagelab.net/ws'; // dirección del servidor - wss://master.local/ws
-  // private host = 'wss://master.local/ws';
+  // private host = 'wss://dev.stagelab.net/ws'; // dirección del servidor - wss://master.local/ws
+  private host = 'wss://192.168.6.1/ws';
   public isConnected = false;
 
 // Monitorizamos el estado de la conexión ws

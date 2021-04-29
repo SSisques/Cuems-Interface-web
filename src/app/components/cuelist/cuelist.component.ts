@@ -1158,6 +1158,7 @@ this.wsRealtime.next(binaryGo);
  pause(idx): void {
   if (this.idCueSelected !== undefined) {
     this.contents[idx][this.tipoCue[idx]].post_go = 'pause';
+    console.log('pause');
   }
  }
  auto_go(idx): void {
@@ -1165,6 +1166,8 @@ this.wsRealtime.next(binaryGo);
     // console.log(idx + 1);
 
     this.contents[idx][this.tipoCue[idx]].post_go = 'go';
+    console.log('go');
+    
     // this.cueList[index + 1].position.x = this.cueList[index].position.x;
     // this.cueList[index + 1].position.y = 40;
 
@@ -1177,6 +1180,7 @@ this.wsRealtime.next(binaryGo);
  post_go(idx): void {
   if (this.idCueSelected !== undefined) {
     this.contents[idx][this.tipoCue[idx]].post_go = 'go_at_end';
+    console.log('go_at_end');
   }
  }
 

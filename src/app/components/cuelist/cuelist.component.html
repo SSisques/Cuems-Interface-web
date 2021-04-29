@@ -32,9 +32,6 @@
 
                         <button mat-button matTooltip="Create a new audio cue" [disabled]="edit.mode" (click)="addCue('AudioCue')"><mat-icon>volume_up</mat-icon></button>
                         <button mat-button matTooltip="Create a new video cue" [disabled]="edit.mode" (click)="addCue('VideoCue')"><mat-icon>tv</mat-icon></button>
-                        <button mat-button matTooltip="Create a new dmx cue" (click)="addCue('DmxCue')" disabled><mat-icon>highlight</mat-icon></button>
-                        <button mat-button matTooltip="Create a new action cue" (click)="addCue('action')" disabled><mat-icon>radio_button_checked</mat-icon></button>
-                        <button mat-button matTooltip="Create a new group cue" (click)="addCue('cuelist')" disabled><mat-icon>folder_open</mat-icon></button>
                         <button mat-flat-button matTooltip="Busqueda de nodos" (click)="hw_discovery()">Hw Discovery</button>
                         <button mat-flat-button matTooltip="Despligue de media" (click)="despliegue()" [color]="color_despligue">Despliegue de media</button>
                         <button mat-button matTooltip="" (click)="stop()">Stop</button>
@@ -50,7 +47,9 @@
                         <button matTooltip="Siwtch edit/show mode" class="btn h-100 btn-outline-primary btn-block" [class.btn-primary]="edit.mode" [class.text-white]="edit.mode" type="button" title="Crear nueva cue" (click)=" Mode()">Show/Edit</button>
                     </div>
                     <!-- el mx margin del eje x left & right -->
-                    <div class="col p-4 mx-1 border bg-light text-center">Eines</div>
+                    <div class="col p-4 mx-1 border bg-light text-center">
+
+                    </div>
                     <div class="col-2 p-0 border bg-light text-center">
                         <button matTooltip="Go from selected Cue" (click)="go()" [class]="claseGo" title="Go...!!" [disabled]="!readyGo">Go</button>
                     </div>
@@ -61,7 +60,7 @@
                 <div class="row justify-content-around h-50">
 
                     <div class="col-12 m-1 p-2 border bg-light">
-                        <mat-progress-bar mode="determinate" [value]="timecode"></mat-progress-bar>
+                        <!-- <mat-progress-bar mode="determinate" [value]="timecode"></mat-progress-bar> -->
 
                         <mat-tab-group mat-align-tabs="start">
                             <mat-tab label="CueList">
@@ -93,7 +92,7 @@
                                             <mat-icon>keyboard_arrow_down</mat-icon>
                                                 <span>No continue</span>
                                         </button>
-                                        <button mat-menu-item matTooltip="Auto continue" (click)="go(i)" [disabled]="edit.mode">
+                                        <button mat-menu-item matTooltip="Auto continue" (click)="auto_go(i)" [disabled]="edit.mode">
                                             <mat-icon>play_for_work</mat-icon>
                                                 <span>Auto continue</span>
                                         </button>
@@ -122,30 +121,7 @@
                                     </button>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="TimeLine">
 
-                                <div class="row p-0 m-0 border" style="height: 200px;">
-                                    <div class="example-box" [ngStyle]="{'width': 100 + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of contents; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue[tipoCue[i]].UI_properties.timeline_position" (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
-                                        {{cue[tipoCue[i]].name}}
-
-                                    </div>
-
-                                    <!-- <p>
-                                        <button (click)="changePosition()">Change element position</button>
-                                    </p> -->
-
-                                    <!-- <div class="example-box" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position">
-                                        Drag me around
-                                    </div> -->
-
-                                </div>
-                                <!-- <div class="row">
-                                    <div class="example-box" [ngStyle]="{'width': cue.duration + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position" (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
-                                        {{cue.name}}
-                                    </div>
-                                </div> -->
-
-                            </mat-tab>
                         </mat-tab-group>
 
                         <!-- reset go deja el go en modo no cargado -->
@@ -154,84 +130,6 @@
 
 
                         <!-- <app-drop></app-drop> -->
-
-
-                    </div>
-                </div>
-            </div>
-
-        </mat-tab>
-        <mat-tab label="Audio Mixer">
-
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
-
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mesa de mezclas de audio
-
-                    </div>
-                </div>
-                <!-- CueList/TimeLine -->
-
-                <div class="row justify-content-around h-50">
-
-                    <div class="col-12 m-1 p-2 border bg-light">
-
-
-
-                    </div>
-                </div>
-            </div>
-
-        </mat-tab>
-        <mat-tab label="Video Mixer">
-
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
-
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mezclador de video, surfaces, blendings ....
-
-                    </div>
-                </div>
-                <!-- CueList/TimeLine -->
-
-                <div class="row justify-content-around h-50">
-
-                    <div class="col-12 m-1 p-2 border bg-light">
-
-
-
-                    </div>
-                </div>
-            </div>
-
-        </mat-tab>
-        <mat-tab label="Dmx Mixer">
-
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
-
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mesa de luces, creamos edimamos memorias, submasters, pach ...
-
-                    </div>
-                </div>
-                <!-- CueList/TimeLine -->
-
-                <div class="row justify-content-around h-50">
-
-                    <div class="col-12 m-1 p-2 border bg-light">
-
 
 
                     </div>
