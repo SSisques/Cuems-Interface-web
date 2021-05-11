@@ -1,104 +1,119 @@
-<!-- <div class="card fadeIn slow">
-    <div class="card-body">
-        <span class="text-info">Proyectos:</span> Página listado de proyectos.
-    </div>
-</div> -->
-
-
 <mat-progress-bar mode="indeterminate" *ngIf="cargado === false"></mat-progress-bar>
-<div class="container h-100 main-container animated fadeIn fast">
+<div class="container-fluid main-container animated fadeIn fast min-height">
+
+  <div class="row text-left px-5 mt-5 mb-3">
+    <h5>
+      <mat-icon aria-hidden="false" aria-label="folder icon">folder</mat-icon> {{ 'projects' | translate }}
+    </h5>
+  </div>
+
+  <!-- Listado proyectos -->
+  <div class="row justify-content-around px-5 custom-list">
+    <div class="col-12 p-0">
+      <button class="new-project btn btn-primary position-absolute px-5 py-2" (click)="newProjectDialog()">{{ 'new.project' | translate }}</button>
+
+      <!-- si cargado es false - no nos ha respondido el servidor -->
+      <div *ngIf="cargado == false; else list">
+        Cargado ...
+      </div>
+      <!-- si cargado es true y el tenemos los datos cargamos el formulario -->
+      <ng-template #list>
+
+        <mat-tab-group animationDuration="0ms" mat-align-tabs="start" [disableRipple]="true">
+          <mat-tab label="{{ 'poject.list' | translate }} ({{listaProyectos.length}})">
+
+            <mat-list>
+              <mat-list-item class="header-list">
+                <div class="col-9 with-icon project-name">
+                  Name
+                </div>
+                <div class="col-1 p-0 text-left">
+                Date
+                </div>
+              </mat-list-item>
+              <mat-list-item *ngFor="let proyecto of listaProyectos; let i = index">
+
+                <div class="col-9 with-icon p-0 project-name">
+
+                  <mat-icon aria-hidden="false" aria-label="folder icon">folder</mat-icon> {{proyecto.name}}
+
+                </div>
+                <div class="col-1 p-0 text-left">
+                  {{proyecto.created | date:'dd/MM/yyyy, HH:mm'}}
+                </div>
+                <div class="col-2 p-0 text-right actions-links">
+                  <button class="edit-project" mat-button (click)=" editarProyecto(this.listaProyectos[i].uuid)">{{ 'edit' | translate }}</button>
+                  <button mat-button (click)=" showProyecto(this.listaProyectos[i].uuid)">{{ 'show' | translate }}</button>
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu" class="options-menu">
+                    <button mat-menu-item (click)="confirmDialog(i,this.listaProyectos[i].uuid)">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{ 'delete' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="duplicateProject(this.listaProyectos[i].uuid)">
+                      <mat-icon>create_new_folder</mat-icon>
+                      <span>{{ 'duplicate' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="forceClosedProject()">
+                      <mat-icon>close</mat-icon>
+                      <span>{{ 'close' | translate }}</span>
+                    </button>
+                  </mat-menu>
+
+                </div>
 
 
-    <!-- Menú -->
-    <div class="row justify-content-around">
-        <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-        <div class="col-12 m-1 p-2 border bg-light text-left">
-            <button mat-button title="Crear proyecto nuevo" (click)="newProjectDialog()">{{ 'new.project' | translate }}</button>
-        </div>
-    </div>
-    <!-- Listado proyectos -->
-    <div class="row justify-content-around h-50">
-        <div class="col-12 m-1 p-2 border bg-aqua">
-            <!-- si cangando es false - no nos ha respondido el servidor -->
-            <div *ngIf="cargado == false; else list">
-                Cargado ...
+
+              </mat-list-item>
+            </mat-list>
+
+          </mat-tab>
+          <mat-tab label="{{ 'trash' | translate }} ({{projectTrashList.length}})">
+
+            <!-- Listado proyectos en la papelera -->
+
+            <div class="row text-right p-0 m-0">
+              <div class="col-12 p-0 text-left trash-btns">
+                <button class="btn btn-dark2" (click)="selectAllTrash()">{{ 'select.all' | translate }}</button>
+                <button class="btn btn-dark2" (click)="deselectAllTrash()">{{ 'deselect.all' | translate }}</button>
+                <button class="btn btn-dark2" (click)="restoreSelected()">{{ 'restore' | translate }}</button>
+                <button class="btn btn-dark2" (click)="deleteSelected('trash')">{{ 'delete.permanently' | translate }}</button>
+              </div>
             </div>
-            <!-- si cargando es true y el tenemos los datos cargamos el formulario -->
-            <ng-template #list>
 
-                <mat-tab-group mat-align-tabs="start">
-                    <mat-tab label="{{ 'poject.list' | translate }}">
-
-                        <mat-list *ngFor="let proyecto of listaProyectos; let i = index">
-                            <mat-list-item>
-
-                                <div class="col-6 with-icon">
-
-                                    <mat-icon mat-list-icon>folder</mat-icon>
-                                    {{proyecto.name}}
-
-                                </div>
-                                <div class="col-6 text-right">
-                                    <button mat-button (click)=" editarProyecto(this.listaProyectos[i].uuid)">Editar</button>
-                                    <button mat-button (click)=" showProyecto(this.listaProyectos[i].uuid)">Show</button>
-                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                                        <mat-icon>more_vert</mat-icon>
-                                      </button>
-                                    <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="confirmDialog(i,this.listaProyectos[i].uuid)">
-                                          <mat-icon>delete</mat-icon>
-                                          <span>Delete</span>
-                                        </button>
-                                        <button mat-menu-item (click)="duplicateProject(this.listaProyectos[i].uuid)">
-                                          <mat-icon>create_new_folder</mat-icon>
-                                          <span>Duplicate</span>
-                                        </button>
-                                        <button mat-menu-item (click)="forceClosedProject()">
-                                            <mat-icon>close</mat-icon>
-                                            <span>Force closed</span>
-                                          </button>
-                                    </mat-menu>
-
-                                    <!-- <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" title="Borrar proyecto" (click)="confirmDialog(i,this.listaProyectos[i].uuid)">
-
-                                        
-                                      </button> -->
-                                </div>
+            <mat-selection-list #projectsTrashList [(ngModel)]="selected">
+              <mat-list-item class="header-list">
+                <div class="col-10 with-icon project-name">
+                  Title
+                </div>
+                <div class="col-2 p-0 text-left">
+                Date
+                </div>
+              </mat-list-item>
+              <mat-list-option checkboxPosition="before" *ngFor="let project of projectTrashList" [value]="project.uuid">
+                <div class="col-10 p-0 project-name">
+                  <mat-icon aria-hidden="false" aria-label="folder icon">folder</mat-icon> {{project.name}}
+                </div>
+                <div class="col-2 p-0 text-left">
+                {{project.created | date:'dd/MM/yyyy, HH:mm'}}
+                </div>
 
 
-                            </mat-list-item>
-                            <mat-divider></mat-divider>
-                        </mat-list>
+              </mat-list-option>
 
-                    </mat-tab>
-                    <mat-tab label="Papelera">
+            </mat-selection-list>
 
-                        <!-- Listado proyectos en la papelera -->
+          </mat-tab>
 
-                        <div class="row text-right">
-                            <div class="col">
-                                <button mat-button (click)="selectAllTrash()">SelectAll</button>
-                                <button mat-button (click)="deselectAllTrash()">DeselectAll</button>
-                                <button mat-button (click)="restoreSelected()">Recuperar</button>
-                                <button mat-button (click)="deleteSelected('trash')">Borrar definitivamente</button>
-                            </div>
-                        </div>
+        </mat-tab-group>
 
-                        <mat-selection-list #projectsTrashList [(ngModel)]="selected">
-                            <mat-list-option *ngFor="let project of projectTrashList" [value]="project.uuid">
-                                <mat-icon mat-list-icon>folder</mat-icon>
-                                {{project.name}}
-                            </mat-list-option>
-                        </mat-selection-list>
-
-                    </mat-tab>
-
-                </mat-tab-group>
-            </ng-template>
-
-        </div>
+      </ng-template>
 
     </div>
+
+  </div>
 
 </div>
 

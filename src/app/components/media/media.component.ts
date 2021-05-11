@@ -7,6 +7,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { AlertService } from '../../_alert';
 import { MatSelectionList } from '@angular/material/list';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-media',
@@ -31,6 +33,7 @@ export class MediaComponent implements OnInit {
 
 
   constructor(private uploadService: UploadService,
+              private translate: TranslateService,
               private fileService: FilesService,
               private wsService: WebsocketService,
               private dialog: MatDialog,
@@ -40,6 +43,10 @@ export class MediaComponent implements OnInit {
                 this.fileService.files_List();
                 this.fileService.files_Trash_List();
                 this.recibimosWs();
+                // this language will be used as a fallback when a translation isn't found in the current language
+                this.translate.setDefaultLang('en');
+                // the lang to use, if the lang isn't available, it will use the current loader to get them
+                //this.translate.use('en');
                }
 
   ngOnInit(): void {
@@ -71,7 +78,7 @@ export class MediaComponent implements OnInit {
             modified: recibo.value[index][this.myFileUuid[index]].modified,
             in_projects: recibo.value[index][this.myFileUuid[index]].in_projects,
             in_trash_projects: recibo.value[index][this.myFileUuid[index]].in_trash_projects,
-            // type: recibo.value[index][this.myFileUuid[index]].type
+            type: recibo.value[index][this.myFileUuid[index]].type
            });
 
           }
@@ -101,7 +108,7 @@ export class MediaComponent implements OnInit {
             modified: recibo.value[index][this.myTrashFileUuid[index]].modified,
             in_projects: recibo.value[index][this.myTrashFileUuid[index]].in_projects,
             in_trash_projects: recibo.value[index][this.myTrashFileUuid[index]].in_trash_projects,
-            type: recibo.value[index][this.myFileUuid[index]].type  
+            type: recibo.value[index][this.myTrashFileUuid[index]].type
            });
 
           }
@@ -143,7 +150,7 @@ export class MediaComponent implements OnInit {
     // this.wsService.wsBlob.next({action: 'file_load_thumbnail', value: uuid});
     // // this.fileService.files_LoadThumbnail(uuid);
     // // console.log(uuid);
-    
+
   }
   // selecciones
   selectAll(): void {
@@ -219,8 +226,8 @@ export class MediaComponent implements OnInit {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '250px';
-  dialogConfig.width = '350px';
+  //dialogConfig.height = '250px';
+  //dialogConfig.width = '350px';
 
 
   if (this.selected.length <= 0) {
@@ -230,25 +237,33 @@ export class MediaComponent implements OnInit {
     // console.log('plural');
     if (tYpe === 'trash') {
       dialogConfig.data = {
-        name: 'Está apunto de borrar definitivamente una selección de archivos. ',
-        msg: 'Confirmamos borrarlos?'
+        name: this.translate.instant('delete.permanently'),
+        msg: this.translate.instant('delete.permanently.files'),
+        btnmsg: this.translate.instant('delete.permanently'),
+        btnclass: 'btn-danger'
       };
     } else {
       dialogConfig.data = {
-        name: 'Está apunto de borrar una selección de archivos. ',
-        msg: 'Confirmamos borrarlos?'
+        name: this.translate.instant('delete'),
+        msg: this.translate.instant('delete.files'),
+        btnmsg: this.translate.instant('delete'),
+        btnclass: 'btn-danger'
       };
     }
   } else {
     if (tYpe === 'trash') {
       dialogConfig.data = {
-        name: 'Está apunto de borrar definitivamente un archivo.',
-        msg: 'Confirmamos borrarlo?'
+        name: this.translate.instant('delete.permanently'),
+        msg: this.translate.instant('delete.permanently.file'),
+        btnmsg: this.translate.instant('delete.permanently'),
+        btnclass: 'btn-danger'
       };
     } else {
       dialogConfig.data = {
-        name: 'Está apunto de borrar un archivo.',
-        msg: 'Confirmamos borrarlo?'
+        name: this.translate.instant('delete'),
+        msg: this.translate.instant('delete.file'),
+        btnmsg: this.translate.instant('delete'),
+        btnclass: 'btn-danger'
       };
     }
     // console.log('uno');
@@ -284,8 +299,8 @@ export class MediaComponent implements OnInit {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '250px';
-  dialogConfig.width = '350px';
+  //dialogConfig.height = '250px';
+  //dialogConfig.width = '350px';
 
   if (this.selected.length <= 0) {
     // console.log('nada seleccionado');
@@ -293,14 +308,18 @@ export class MediaComponent implements OnInit {
   } else if (this.selected.length > 1) {
     // console.log('plural');
     dialogConfig.data = {
-      name: 'Está apunto de recuperar una selección de archivos.',
-      msg: 'Confirmamos recuperarlos?'
+      name:this.translate.instant('restore'),
+      msg: this.translate.instant('restore.files'),
+      btnmsg: this.translate.instant('accept'),
+      btnclass: 'btn-primary'
     };
   } else {
     // console.log('uno');
     dialogConfig.data = {
-      name: 'Está apunto de recuperar un archivo.',
-      msg: 'Confirmamos recuperarlo?'
+      name:this.translate.instant('restore'),
+      msg: this.translate.instant('restore.file'),
+      btnmsg: this.translate.instant('accept'),
+      btnclass: 'btn-primary'
     };
   }
 
@@ -371,14 +390,14 @@ export class MediaComponent implements OnInit {
 //         if (data === true) {
 //           // console.log('confirmado');
 //           // console.log(this.filesList);
-          
+
 
 //           for (const newfile of this.archivosComponent) {
 
 //             // console.log(newfile.file.name);
 
 //           for (const oldfile of this.filesList) {
-            
+
 //             if (newfile.file.name === oldfile.name) {
 
 //               console.log(oldfile.uuid);
@@ -388,12 +407,12 @@ export class MediaComponent implements OnInit {
 //               // this.fileService.file_deleteFromServer(oldfile.uuid); // borramos del servidor
 //               // console.log('borrados archivos');
 //             }
-              
+
 //             }
-            
+
 //           }
 //           // cargamos los nuevos archivos  xº
-          
+
 //         }
 //       });
 //  }

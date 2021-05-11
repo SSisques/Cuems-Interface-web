@@ -15,7 +15,7 @@ export class EditCueComponent implements OnInit {
   editForm: FormGroup;
 
   mediaList: any[] = [
-    { 
+    {
     unix_name: 'Sin media'
     }
   ];
@@ -30,7 +30,7 @@ export class EditCueComponent implements OnInit {
   loopTimes: number;
   typeCue: string;
   newCue: boolean;
-  
+
 
   constructor(
     private fb: FormBuilder,
@@ -73,15 +73,15 @@ export class EditCueComponent implements OnInit {
             //   this.audioOutputs.push( data.audioOutputList[index].name );
             //   // this.audioOutputs = data.audioOutputList[index].name;
             // }
-            
+
             console.log(this.defaultOutput);
             // console.log(this.outputs);
             // console.log(data.audioOutputList);
-            
-            
+
+
             // console.log(this.outputName);
-            
-            
+
+
             break;
           case 'VideoCue':
             for (const file of data.mediaList) {
@@ -93,8 +93,8 @@ export class EditCueComponent implements OnInit {
             this.defaultOutput = data.videoOutputList[0];
             this.outputs = data.videoOutputList;
             console.log(this.outputs);
-            
-            
+
+
             break;
           case 'DmxCue':
             console.log('Esperando a listar las memorias de luces');
@@ -120,7 +120,7 @@ export class EditCueComponent implements OnInit {
           duration   : ['', ],
           output_name: [this.defaultOutput.output, ]
       });
-      
+
 
       } else {
         let fileName = 'Sin media';
@@ -156,7 +156,7 @@ export class EditCueComponent implements OnInit {
               output_name: [data.output_name, ]
             });
             // console.log(this.outputName);
-            
+
 
         // } else {
         //   this.editForm = this.fb.group({  // group es un objeto de javascript literal
@@ -204,7 +204,7 @@ export class EditCueComponent implements OnInit {
   // }
   // output_Load(): void{
   //   if () {
-      
+
   //   }
   // }
   duration(inTime, outTime): void{
@@ -297,12 +297,14 @@ msgClose(): void {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '150px';
-  dialogConfig.width = 'auto';
+  //dialogConfig.height = '150px';
+  //dialogConfig.width = 'auto';
 
   dialogConfig.data = {
     name: 'Cerramos sin aplicar cambios?',
-    msg: ''
+    msg: '',
+    btnmsg: 'Delete',
+    btnclass: 'btn-danger'
  };
 
   const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);

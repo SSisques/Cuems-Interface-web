@@ -1,8 +1,8 @@
-<div class="modal-header">
+<div class="modal-header pb-3 pl-0 pr-0 pt-0">
     <h4 class="modal-title" id="modal-basic-title">Editando Cue {{editForm.value.name}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="msgClose()">
+    <!-- <button type="button" class="close" aria-label="Close" (click)="msgClose()">
       <span aria-hidden="true">&times;</span>
-    </button>
+    </button> -->
 </div>
 <form autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
     <mat-tab-group animationDuration="0ms">
@@ -94,9 +94,7 @@
         </mat-tab>
     </mat-tab-group>
 </form>
-
-
-<mat-card-actions>
-    <button mat-raised-button type="button" color="primary" (click)="save()">Aceptar</button>&nbsp;
-    <button mat-raised-button type="button" color="primary" (click)="close()">Cancelar</button>
-</mat-card-actions>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-light px-4 py-2 mr-4" (click)="close()">{{ 'cancel' | translate }}</button>
+    <button class="btn btn-primary px-4 py-2" (click)="save()" cdkFocusInitial>{{ 'save' | translate }}</button>
+</div>

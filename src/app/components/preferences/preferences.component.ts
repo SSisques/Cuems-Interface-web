@@ -42,7 +42,7 @@ export class PreferencesComponent implements OnInit {
 }
 
 close(): void {
-  this.dialogRef.close('close');
+  this.dialogRef.close();
 }
 handleKeyUp(e): void{ // grabamos al presionar el enter
   if (e.keyCode === 13){

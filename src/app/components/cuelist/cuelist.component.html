@@ -12,241 +12,291 @@
 <ng-keyboard-shortcuts-help [key]="'f1'" [closeKey]="'escape'" [title]="''"></ng-keyboard-shortcuts-help>
 <!-- si cangando es false - no nos ha respondido el servidor -->
 <mat-progress-bar mode="indeterminate" *ngIf="cargado === false"></mat-progress-bar>
-<div *ngIf="cargado == false; else page"></div>
-<!-- si cargando es true y el tenemos los datos cargamos el formulario -->
-<ng-template #page>
-    <!-- menu top proyectos -->
-    <!-- <div class="card fadeIn slow"> -->
-    <!-- <div class="card-body"> -->
 
-    <!-- <span class="text-info"></span> Editando el proyecto <strong>{{cueMs.name}}</strong> creado el <strong>{{ cueMs.created }}</strong>&nbsp; -->
+<div class="container-fluid main-container animated fadeIn fast min-height">
+  <div class="row text-left px-5 mt-5 mb-3">
+    <div class="col p-0">
+    <h5>
+      <mat-icon aria-hidden="false" aria-label="folder icon">folder</mat-icon> Project: {{cueMs.name}}
+    </h5>
+    </div>
+    <div class="col-auto p-0">
+      <button class="btn btn-dark2 mr-3" mat-button matTooltip="Project preferences" [hidden]="!edit.editing" (click)="preferences()">
+        <mat-icon>settings</mat-icon> {{ 'settings' | translate }}
+      </button>
+    <button class="btn-save-project btn btn-dark2" mat-button matTooltip="Save project" [hidden]="!edit.editing" [color]="edit.estiloGuardar" (click)=" saveProject()">{{ 'save' | translate }} {{ 'min.project' | translate }}</button>
 
-    <mat-tab-group mat-align-tabs="start" id="main-tab-group">
-        <mat-tab label="Secuencia">
 
-            <div class="container h-100 main-container animated fadeIn fast" (clickOutside)="unselectCue()">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
+    </div>
+  </div>
 
-                        <button mat-button matTooltip="Create a new audio cue" [disabled]="edit.mode" (click)="addCue('AudioCue')"><mat-icon>volume_up</mat-icon></button>
-                        <button mat-button matTooltip="Create a new video cue" [disabled]="edit.mode" (click)="addCue('VideoCue')"><mat-icon>tv</mat-icon></button>
-                        <button mat-button matTooltip="Create a new dmx cue" (click)="addCue('DmxCue')" disabled><mat-icon>highlight</mat-icon></button>
-                        <button mat-button matTooltip="Create a new action cue" (click)="addCue('action')" disabled><mat-icon>radio_button_checked</mat-icon></button>
-                        <button mat-button matTooltip="Create a new group cue" (click)="addCue('cuelist')" disabled><mat-icon>folder_open</mat-icon></button>
-                        <button mat-flat-button matTooltip="Busqueda de nodos" (click)="hw_discovery()">Hw Discovery</button>
-                        <button mat-flat-button matTooltip="Despligue de media" (click)="despliegue()" [color]="color_despligue">Despliegue de media</button>
-                        <button mat-button matTooltip="" (click)="stop()">Stop</button>
-                        <button mat-button matTooltip="" (click)="resetAll()">ResetAll</button>
 
-                    </div>
+
+
+  <div class="row justify-content-around px-5 custom-list cuelist">
+    <div class="col-12 p-0">
+      <!-- si cargado es false - no nos ha respondido el servidor -->
+      <div *ngIf="cargado == false; else page">
+        Cargado ...
+      </div>
+      <!-- si cargando es true y el tenemos los datos cargamos el formulario -->
+      <ng-template #page>
+        <!-- menu top proyectos -->
+        <!-- <div class="card fadeIn slow"> -->
+        <!-- <div class="card-body"> -->
+
+        <!-- <span class="text-info"></span> Editando el proyecto <strong>{{cueMs.name}}</strong> creado el <strong>{{ cueMs.created }}</strong>&nbsp; -->
+
+        <mat-tab-group animationDuration="0ms" mat-align-tabs="start" [disableRipple]="true" id="main-tab-group">
+
+          <mat-tab label="Secuencia">
+
+            <div class="main-container animated fadeIn fast" (clickOutside)="unselectCue()">
+              <!-- Menú -->
+              <div class="row justify-content-around m-0">
+                <div class="col-auto p-0 add-cue">
+                  <button mat-button matTooltip="Create a new audio cue" [disabled]="edit.mode" (click)="addCue('AudioCue')">
+                    <mat-icon fontSet="material-icons-outlined">volume_up</mat-icon>
+                    <span>Audio</span>
+                  </button>
+                  <button mat-button matTooltip="Create a new video cue" [disabled]="edit.mode" (click)="addCue('VideoCue')">
+                    <mat-icon fontSet="material-icons-outlined">videocam</mat-icon>
+                    <span>Video</span>
+                  </button>
+                  <button mat-button matTooltip="Create a new dmx cue" (click)="addCue('DmxCue')" disabled>
+                    <mat-icon fontSet="material-icons-outlined">lightbulb</mat-icon>
+                    <span>Light</span>
+                  </button>
+                  <button mat-button matTooltip="Create a new action cue" (click)="addCue('action')" disabled>
+                    <mat-icon fontSet="material-icons-outlined">next_plan</mat-icon>
+                    <span>Action</span>
+                  </button>
+                  <button mat-button matTooltip="Create a new group cue" (click)="addCue('cuelist')" disabled>
+                    <mat-icon fontSet="material-icons-outlined">library_add</mat-icon>
+                    <span>Group</span>
+
+                  </button>
                 </div>
-                <!-- Submenú cues / reproducción -->
-                <!-- <app-navbar></app-navbar> -->
-                <div class="row" style="height: 75px;">
+                <div class="col-auto p-4"></div>
+                <div class="col p-0">
+
+                  <!-- Submenú cues / reproducción -->
+                  <!-- <app-navbar></app-navbar> -->
+                  <div class="row m-0">
                     <!-- Con xl defines como se verá en la versión grande con sm en la smart pnone -->
-                    <div class="col-2 p-0 border bg-light text-center">
-                        <button matTooltip="Siwtch edit/show mode" class="btn h-100 btn-outline-primary btn-block" [class.btn-primary]="edit.mode" [class.text-white]="edit.mode" type="button" title="Crear nueva cue" (click)=" Mode()">Show/Edit</button>
+                    <div class="col-2 p-0 text-center my-auto">
+                      <button matTooltip="Siwtch edit/show mode" class="btn btn-primary btn-block" type="button" title="Crear nueva cue" (click)=" Mode()">Show/Edit</button>
                     </div>
                     <!-- el mx margin del eje x left & right -->
-                    <div class="col p-4 mx-1 border bg-light text-center">Eines</div>
-                    <div class="col-2 p-0 border bg-light text-center">
-                        <button matTooltip="Go from selected Cue" (click)="go()" [class]="claseGo" title="Go...!!" [disabled]="!readyGo">Go</button>
+                    <div class="col p-0 text-center my-auto">
+                      <button class="btn btn-dark2 mr-3" matTooltip="Busqueda de nodos" (click)="hw_discovery()">Hw Discovery</button>
+                      <button class="btn btn-dark2 mr-3" matTooltip="Despligue de media" (click)="despliegue()" [color]="color_despligue">Despliegue de media</button>
+                      <button class="btn btn-dark2 mr-3" matTooltip="" (click)="stop()">Stop</button>
+                      <button class="btn btn-dark2 mr-3" matTooltip="" (click)="resetAll()">ResetAll</button>
                     </div>
-                </div>
-                <!-- CueList/TimeLine -->
-                <!-- cuando cliqueamos fuera de las cuesList -->
+                    <div class="col-auto p-0 text-center">
+                      <button class="btn btn-success btn-go" matTooltip="Go from selected Cue" (click)="go()" title="Go...!!" [disabled]="!readyGo">Go</button>
+                    </div>
+                  </div>
+                  <!-- CueList/TimeLine -->
+                  <!-- cuando cliqueamos fuera de las cuesList -->
 
-                <div class="row justify-content-around h-50">
+                  <div class="row justify-content-around h-50 m-0">
 
-                    <div class="col-12 m-1 p-2 border bg-light">
-                        <mat-progress-bar mode="determinate" [value]="timecode"></mat-progress-bar>
+                    <div class="col-12 m-0 mt-3 p-0">
+                      <!-- <mat-progress-bar mode="determinate" [value]="timecode"></mat-progress-bar> -->
 
-                        <mat-tab-group mat-align-tabs="start">
-                            <mat-tab label="CueList">
-                                <!-- template listado de cues -->
-                                <div cdkDropList class="valign-center" (cdkDropListDropped)="drop($event)">
-                                    <button type="button" class="list-group-item list-group-item-action p-0" *ngFor="let cue of contents;let i = index;" cdkDrag [cdkDragDisabled]="edit.mode" [class.active]="i === idCueSelected" (click)="selectCue(i)">
-                                        <span class="with-icon float-left p-2">
-                                            <mat-icon [hidden]="edit.mode">drag_indicator</mat-icon>
-                                            <mat-icon [hidden]="cue[tipoCue[i]].UI_properties.warning === 0" class="warning-icon">report_problem</mat-icon>
-                                            <mat-icon [hidden]="!cue.AudioCue">volume_up</mat-icon>
-                                            <mat-icon [hidden]="!cue.VideoCue">tv</mat-icon>
-                                            <mat-icon [hidden]="!cue.DmxCue">highlight</mat-icon>
-                                            <mat-icon [hidden]="!cue.Action">radio_button_checked</mat-icon>
-                                            <mat-icon [hidden]="!cue.CueList">folder_open</mat-icon>
-                                            &nbsp;
-                                                <!-- {{ cue[this.tipoCue].common_properties.name}} -->
-                                                {{ cue[tipoCue[i]].name }}
-                                        </span>
-                                        <span  class="float-right">
-                                            <!-- {{ cue[tipoCue[i]].prewait.CTimecode }} | {{ duration(i) }} | {{ cue[tipoCue[i]].postwait.CTimecode }} -->
-                                            
-                                            <button mat-icon-button matTooltip="Cue opcions" [matMenuTriggerFor]="contMenu" aria-label="Example icon-button with a menu">
-                                                <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'pause'">keyboard_arrow_down</mat-icon>
-                                                <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'go'">play_for_work</mat-icon>
-                                                <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'go_at_end'">arrow_drop_down_circle</mat-icon>
-                                            </button>
-                                    <mat-menu #contMenu="matMenu">
-                                        <button mat-menu-item matTooltip="No continue" (click)="pause(i)" [disabled]="edit.mode">
-                                            <mat-icon>keyboard_arrow_down</mat-icon>
-                                                <span>No continue</span>
-                                        </button>
-                                        <button mat-menu-item matTooltip="Auto continue" (click)="go(i)" [disabled]="edit.mode">
-                                            <mat-icon>play_for_work</mat-icon>
-                                                <span>Auto continue</span>
-                                        </button>
-                                        <button mat-menu-item matTooltip="Auto follow" (click)="post_go(i)" [disabled]="edit.mode">
-                                            <mat-icon>play_for_work</mat-icon>
-                                                <span>Auto follow</span>
-                                        </button>
-                                    </mat-menu>
+                      <mat-tab-group animationDuration="0ms" mat-align-tabs="start">
+                        <mat-tab label="List">
+                          <!-- template listado de cues -->
+                          <div cdkDropList class="valign-center custom-drop-list" (cdkDropListDropped)="drop($event)">
+                            <button type="button" class="list-group-item list-group-item-action px-0 py-3" *ngFor="let cue of contents;let i = index;" cdkDrag [cdkDragDisabled]="edit.mode" [class.active]="i === idCueSelected" (click)="selectCue(i)">
+                              <span class="with-icon float-left p-2">
+                                <span style="width:25px;"><mat-icon [hidden]="cue[tipoCue[i]].UI_properties.warning === 0" class="warning-icon">report_problem</mat-icon></span>
+                                <mat-icon [hidden]="edit.mode">drag_indicator</mat-icon>
+                                <mat-icon fontSet="material-icons-outlined" [hidden]="!cue.AudioCue">volume_up</mat-icon>
+                                <mat-icon fontSet="material-icons-outlined" [hidden]="!cue.VideoCue">videocam</mat-icon>
+                                <mat-icon fontSet="material-icons-outlined" [hidden]="!cue.DmxCue">lightbulb</mat-icon>
+                                <mat-icon fontSet="material-icons-outlined" [hidden]="!cue.Action">next_plan</mat-icon>
+                                <mat-icon fontSet="material-icons-outlined" [hidden]="!cue.CueList">library_add</mat-icon>
+                                &nbsp;
+                                <!-- {{ cue[this.tipoCue].common_properties.name}} -->
+                                {{ cue[tipoCue[i]].name }}
+                              </span>
+                              <span class="float-right">
+                                <!-- {{ cue[tipoCue[i]].prewait.CTimecode }} | {{ duration(i) }} | {{ cue[tipoCue[i]].postwait.CTimecode }} -->
 
-                                    <button mat-icon-button matTooltip="Cue opcions" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                                        <mat-icon>more_vert</mat-icon>
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                        <button mat-menu-item matTooltip="Delete Cue" (click)="confirmDialog(i)" [disabled]="edit.mode">
-                                    <mat-icon>delete</mat-icon>
-                                        <span>Delete</span>
+                                <button mat-icon-button matTooltip="Cue opcions" [matMenuTriggerFor]="contMenu" aria-label="Example icon-button with a menu">
+                                  <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'pause'">keyboard_arrow_down</mat-icon>
+                                  <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'go'">play_for_work</mat-icon>
+                                  <mat-icon *ngIf="cue[tipoCue[i]].post_go == 'go_at_end'">arrow_drop_down_circle</mat-icon>
                                 </button>
-                                        <button mat-menu-item matTooltip="Edit Cue" (click)="editCueDialog()" [disabled]="edit.mode">
+                                <mat-menu #contMenu="matMenu">
+                                  <button mat-menu-item matTooltip="No continue" (click)="pause(i)" [disabled]="edit.mode">
+                                    <mat-icon>keyboard_arrow_down</mat-icon>
+                                    <span>No continue</span>
+                                  </button>
+                                  <button mat-menu-item matTooltip="Auto continue" (click)="go(i)" [disabled]="edit.mode">
+                                    <mat-icon>play_for_work</mat-icon>
+                                    <span>Auto continue</span>
+                                  </button>
+                                  <button mat-menu-item matTooltip="Auto follow" (click)="post_go(i)" [disabled]="edit.mode">
+                                    <mat-icon>play_for_work</mat-icon>
+                                    <span>Auto follow</span>
+                                  </button>
+                                </mat-menu>
+
+                                <button mat-icon-button matTooltip="Cue opcions" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item matTooltip="Edit Cue" (click)="editCueDialog()" [disabled]="edit.mode">
                                     <mat-icon>edit</mat-icon>
-                                        <span>Edit</span>
-                                </button>
-                                    </mat-menu>
+                                    <span>Edit</span>
+                                  </button>
+                                  <button mat-menu-item matTooltip="Delete Cue" (click)="confirmDialog(i)" [disabled]="edit.mode">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Delete</span>
+                                  </button>
+                                </mat-menu>
 
-                                    </span>
+                              </span>
 
-                                    </button>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="TimeLine">
+                            </button>
+                          </div>
+                        </mat-tab>
+                        <mat-tab label="Timeline">
 
-                                <div class="row p-0 m-0 border" style="height: 200px;">
-                                    <div class="example-box" [ngStyle]="{'width': 100 + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of contents; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue[tipoCue[i]].UI_properties.timeline_position" (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
-                                        {{cue[tipoCue[i]].name}}
+                          <div class="row p-0 m-0 border" style="height: 200px;">
+                            <div class="example-box" [ngStyle]="{'width': 100 + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of contents; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue[tipoCue[i]].UI_properties.timeline_position"
+                              (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
+                              {{cue[tipoCue[i]].name}}
 
-                                    </div>
+                            </div>
 
-                                    <!-- <p>
-                                        <button (click)="changePosition()">Change element position</button>
-                                    </p> -->
+                            <!-- <p>
+                                                <button (click)="changePosition()">Change element position</button>
+                                            </p> -->
 
-                                    <!-- <div class="example-box" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position">
-                                        Drag me around
-                                    </div> -->
+                            <!-- <div class="example-box" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position">
+                                                Drag me around
+                                            </div> -->
 
-                                </div>
-                                <!-- <div class="row">
-                                    <div class="example-box" [ngStyle]="{'width': cue.duration + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position" (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
-                                        {{cue.name}}
-                                    </div>
-                                </div> -->
+                          </div>
+                          <!-- <div class="row">
+                                            <div class="example-box" [ngStyle]="{'width': cue.duration + 'px'  }" cdkDragLockAxis="x" *ngFor="let cue of cueList; let i = index" cdkDrag [cdkDragFreeDragPosition]="cue.position" (cdkDragEnded)="dragEnd($event, i)" [cdkDragDisabled]="edit.mode">
+                                                {{cue.name}}
+                                            </div>
+                                        </div> -->
 
-                            </mat-tab>
-                        </mat-tab-group>
+                        </mat-tab>
+                      </mat-tab-group>
 
-                        <!-- reset go deja el go en modo no cargado -->
-                        <!-- <app-cue [cue]="Cue" [idx]="i" *ngFor="let Cue of cues; let i = index"></app-cue> -->
-                        <!-- <div class="list-group" *ngFor="let cue of cues;let i = index; trackBy: order"> -->
+                      <!-- reset go deja el go en modo no cargado -->
+                      <!-- <app-cue [cue]="Cue" [idx]="i" *ngFor="let Cue of cues; let i = index"></app-cue> -->
+                      <!-- <div class="list-group" *ngFor="let cue of cues;let i = index; trackBy: order"> -->
 
 
-                        <!-- <app-drop></app-drop> -->
+                      <!-- <app-drop></app-drop> -->
 
 
                     </div>
+                  </div>
                 </div>
+
+              </div>
+
+
             </div>
 
-        </mat-tab>
-        <mat-tab label="Audio Mixer">
+          </mat-tab>
+          <mat-tab label="Audio Mixer">
 
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
+            <div class="container main-container animated fadeIn fast">
+              <!-- Menú -->
+              <div class="row justify-content-around">
+                <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
+                <div class="col-12 m-1 p-2 text-center">
 
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mesa de mezclas de audio
+                  <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
+                  Mesa de mezclas de audio
 
-                    </div>
                 </div>
-                <!-- CueList/TimeLine -->
+              </div>
+              <!-- CueList/TimeLine -->
 
-                <div class="row justify-content-around h-50">
+              <div class="row justify-content-around">
 
-                    <div class="col-12 m-1 p-2 border bg-light">
+                <div class="col-12 m-1 p-2">
 
 
 
-                    </div>
                 </div>
+              </div>
             </div>
 
-        </mat-tab>
-        <mat-tab label="Video Mixer">
+          </mat-tab>
+          <mat-tab label="Video Mixer">
 
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
+            <div class="container main-container animated fadeIn fast">
+              <!-- Menú -->
+              <div class="row justify-content-around">
+                <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
+                <div class="col-12 m-1 p-2 text-center">
 
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mezclador de video, surfaces, blendings ....
+                  <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
+                  Mezclador de video, surfaces, blendings ....
 
-                    </div>
                 </div>
-                <!-- CueList/TimeLine -->
+              </div>
+              <!-- CueList/TimeLine -->
 
-                <div class="row justify-content-around h-50">
+              <div class="row justify-content-around ">
 
-                    <div class="col-12 m-1 p-2 border bg-light">
+                <div class="col-12 m-1 p-2">
 
 
 
-                    </div>
                 </div>
+              </div>
             </div>
 
-        </mat-tab>
-        <mat-tab label="Dmx Mixer">
+          </mat-tab>
+          <mat-tab label="Dmx Mixer">
 
-            <div class="container h-100 main-container animated fadeIn fast">
-                <!-- Menú -->
-                <div class="row justify-content-around">
-                    <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
-                    <div class="col-12 m-1 p-2 border bg-light text-center">
+            <div class="container main-container animated fadeIn fast">
+              <!-- Menú -->
+              <div class="row justify-content-around">
+                <!-- col-12 maximo de grande m-1 margen 1 y p-2 paddind 2 -->
+                <div class="col-12 m-1 p-2 text-center">
 
-                        <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
-                        Mesa de luces, creamos edimamos memorias, submasters, pach ...
+                  <!-- <button mat-button matTooltip="Create a new channel" [disabled]="edit.mode"><mat-icon>volume_up</mat-icon></button> -->
+                  Mesa de luces, creamos edimamos memorias, submasters, pach ...
 
-                    </div>
                 </div>
-                <!-- CueList/TimeLine -->
+              </div>
+              <!-- CueList/TimeLine -->
 
-                <div class="row justify-content-around h-50">
+              <div class="row justify-content-around">
 
-                    <div class="col-12 m-1 p-2 border bg-light">
+                <div class="col-12 m-1 p-2">
 
 
 
-                    </div>
                 </div>
+              </div>
             </div>
 
-        </mat-tab>
-    </mat-tab-group>
+          </mat-tab>
+        </mat-tab-group>
 
-    <!-- </div> -->
-    <!-- </div> -->
+        <!-- </div> -->
+        <!-- </div> -->
 
-</ng-template>
-<hr>
-
+      </ng-template>
+    </div>
+  </div>
+</div>
 <!-- <div id="messageArea " *ngFor="let p of pref ">
     <p id="messageLabel ">Consola de entrada OSC:</p>
     <pre *ngFor="let n of p.node ">{{n.osc_dest_host}}</pre>
