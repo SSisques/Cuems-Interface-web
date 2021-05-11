@@ -24,24 +24,24 @@
 
             <mat-list>
               <mat-list-item class="header-list">
-                <div class="col-9 with-icon project-name">
+                <div class="col-7 col-xl-8 with-icon project-name">
                   Name
                 </div>
-                <div class="col-1 p-0 text-left">
+                <div class="col-5 col-xl-4 p-0 text-left">
                 Date
                 </div>
               </mat-list-item>
               <mat-list-item *ngFor="let proyecto of listaProyectos; let i = index">
 
-                <div class="col-9 with-icon p-0 project-name">
+                <div class="col-7 col-xl-8 with-icon p-0 project-name">
 
                   <mat-icon aria-hidden="false" aria-label="folder icon">folder</mat-icon> {{proyecto.name}}
 
                 </div>
-                <div class="col-1 p-0 text-left">
+                <div class="col-2 p-0 text-left">
                   {{proyecto.created | date:'dd/MM/yyyy, HH:mm'}}
                 </div>
-                <div class="col-2 p-0 text-right actions-links">
+                <div class="col-3 col-xl-2 p-0 text-right actions-links">
                   <button class="edit-project" mat-button (click)=" editarProyecto(this.listaProyectos[i].uuid)">{{ 'edit' | translate }}</button>
                   <button mat-button (click)=" showProyecto(this.listaProyectos[i].uuid)">{{ 'show' | translate }}</button>
                   <button mat-icon-button [matMenuTriggerFor]="menu">

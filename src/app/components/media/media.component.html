@@ -29,8 +29,11 @@
                       </div>
                     </div>
                     <div class="row header-list m-0">
-                      <div class="col-10 with-icon project-name">
+                      <div class="col-8 with-icon project-name">
                         Title
+                      </div>
+                      <div class="col-2 p-0 text-center">
+                      Active projects
                       </div>
                       <div class="col-2 p-0 text-left">
                       Date
@@ -38,8 +41,11 @@
                     </div>
                     <mat-selection-list #fileList [(ngModel)]="selected">
                         <mat-list-option checkboxPosition="before" *ngFor="let file of filesList" [value]="file.uuid">
-                          <div class="col-10 with-icon p-0 project-name">
-                             <span class="file-ext mr-4">{{file.unix_name.split('.').pop()}}</span> {{file.unix_name}} (Used in {{file.in_projects}} active projects and {{file.in_trash_projects}} trash projects)
+                          <div class="col-8 with-icon p-0 project-name">
+                             <span class="file-ext mr-4">{{file.unix_name.split('.').pop()}}</span> {{file.unix_name}}
+                          </div>
+                          <div class="col-2 p-0 text-center">
+                          {{file.in_projects}}
                           </div>
                           <div class="col-2 p-0 text-left">
                           {{file.created | date:'dd/MM/yyyy, HH:mm'}}
@@ -66,8 +72,11 @@
                       </div>
                     </div>
                     <div class="row header-list m-0">
-                      <div class="col-10 with-icon project-name">
+                      <div class="col-8 with-icon project-name">
                         Title
+                      </div>
+                      <div class="col-2 p-0 text-center">
+                      Active projects
                       </div>
                       <div class="col-2 p-0 text-left">
                       Date
@@ -75,8 +84,11 @@
                     </div>
                     <mat-selection-list #fileTrashList [(ngModel)]="selected">
                       <mat-list-option checkboxPosition="before" *ngFor="let file of filesTrashList" [value]="file.uuid">
-                          <div class="col-10 with-icon p-0 project-name">
-                             <span class="file-ext mr-4">{{file.unix_name.split('.').pop()}}</span> {{file.unix_name}} (Used in {{file.in_projects}} active projects and {{file.in_trash_projects}} trash projects)
+                          <div class="col-8 with-icon p-0 project-name">
+                             <span class="file-ext mr-4">{{file.unix_name.split('.').pop()}}</span> {{file.unix_name}}
+                          </div>
+                          <div class="col-2 p-0 text-center">
+                          {{file.in_projects}}
                           </div>
                           <div class="col-2 p-0 text-left">
                           {{file.created | date:'dd/MM/yyyy, HH:mm'}}

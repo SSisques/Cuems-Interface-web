@@ -358,6 +358,7 @@ footer {
       background-color: $bgactive;
       border-radius: 20px;
       color: $white;
+      max-width: 210px;
 
       &::placeholder {
         color: $textcontent;
@@ -439,7 +440,7 @@ footer {
       .mat-list-item-content {
         padding: 0 10px;
         color: $textactive;
-
+        font-weight: 300;
         .project-name {
           font-weight: 300;
 
@@ -550,9 +551,18 @@ footer {
     &:first-child {
       border-top: 1px dashed $bgactive;
     }
+
+  }
+  .cdk-drag-placeholder{
+    background-color: $bgsecondary;
+    color: $bgsecondary ;
   }
 }
 
+.cdk-drag{
+  background-color: $bgmain;
+  color: $textcontent;
+}
 .mat-button,
 .mat-icon-button,
 .mat-menu-item {
