@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-    Preferencias del proyecto {{editForm.value.name}}</h1>
+    Preferencias del proyecto: {{editForm.value.name}}</h1>
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="Básico">
         <div class="p-4">
@@ -32,6 +32,7 @@
     </mat-tab>
     <mat-tab label="Third"> Content 3 </mat-tab>
 </mat-tab-group>
-<mat-card-actions>
-    <button mat-raised-button type="button" color="primary" (click)="save()">Save/Close</button>
-</mat-card-actions>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-light px-4 py-2 mr-4" (click)="close()">{{ 'cancel' | translate }}</button>
+    <button class="btn btn-primary px-4 py-2" (click)="save()" cdkFocusInitial>{{ 'save' | translate }}</button>
+</div>

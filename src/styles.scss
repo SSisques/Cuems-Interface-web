@@ -1,0 +1,857 @@
+/**
+* Generated theme by Material Theme Generator
+* https://materialtheme.arcsine.dev
+*/
+// @import 'variables';
+@import '~@angular/material/theming'; // $primary: red;
+// $border-color: $primary !default;
+@import 'custom-variables';
+@import '~bootstrap/scss/bootstrap.scss'; // @import '~bootstrap/scss/_variables.scss';
+// @import '~bootstrap/scss/bootstrap-grid.scss';
+// $brand-primary: red;
+// $body-bg:  #e813c1;
+// $body-color:                $gray-900 !default;
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Fonts
+@import 'https://fonts.googleapis.com/css?family=Material+Icons';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+$fontConfig: (
+  display-4: mat-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
+  display-3: mat-typography-level(56px, 56px, 300, 'Roboto', -0.0089em),
+  display-2: mat-typography-level(45px, 48px, 300, 'Roboto', 0.0000em),
+  display-1: mat-typography-level(34px, 40px, 300, 'Roboto', 0.0074em),
+  headline: mat-typography-level(24px, 32px, 300, 'Roboto', 0.0000em),
+  title: mat-typography-level(20px, 32px, 500, 'Roboto', 0.0075em),
+  subheading-2: mat-typography-level(16px, 28px, 400, 'Roboto', 0.0094em),
+  subheading-1: mat-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
+  body-2: mat-typography-level(14px, 24px, 300, 'Roboto', 0.0179em),
+  body-1: mat-typography-level(14px, 20px, 300, 'Roboto', 0.0179em),
+  button: mat-typography-level(14px, 14px, 300, 'Roboto', 0.0893em),
+  caption: mat-typography-level(12px, 20px, 300, 'Roboto', 0.0333em),
+  input: mat-typography-level(inherit, 1.125, 300, 'Roboto', 1.5px)
+); // Foreground Elements
+// Light Theme Text
+$dark-text: $white;
+$dark-primary-text: rgba($dark-text, 0.87);
+$dark-accent-text: rgba($dark-primary-text, 0.54);
+$dark-disabled-text: rgba($dark-primary-text, 0.38);
+$dark-dividers: rgba($dark-primary-text, 0.12);
+$dark-focused: rgba($dark-primary-text, 0.12);
+$mat-light-theme-foreground: (
+  base: black,
+  divider: $dark-dividers,
+  dividers: $dark-dividers,
+  disabled: $dark-disabled-text,
+  disabled-button: rgba($dark-text, 0.26),
+  disabled-text: $dark-disabled-text,
+  elevation: black,
+  secondary-text: $dark-accent-text,
+  hint-text: $dark-disabled-text,
+  accent-text: $dark-accent-text,
+  icon: $dark-accent-text,
+  icons: $dark-accent-text,
+  text: $dark-primary-text,
+  slider-min: $dark-primary-text,
+  slider-off: rgba($dark-text, 0.26),
+  slider-off-active: $dark-disabled-text,
+); // Dark Theme text
+$light-text: #cfd4db;
+$light-primary-text: $light-text;
+$light-accent-text: rgba($light-primary-text, 0.7);
+$light-disabled-text: rgba($light-primary-text, 0.5);
+$light-dividers: rgba($light-primary-text, 0.12);
+$light-focused: rgba($light-primary-text, 0.12);
+$mat-dark-theme-foreground: (
+  base: $light-text,
+  divider: $light-dividers,
+  dividers: $light-dividers,
+  disabled: $light-disabled-text,
+  disabled-button: rgba($light-text, 0.3),
+  disabled-text: $light-disabled-text,
+  elevation: black,
+  hint-text: $light-disabled-text,
+  secondary-text: $light-accent-text,
+  accent-text: $light-accent-text,
+  icon: $light-text,
+  icons: $light-text,
+  text: $light-text,
+  slider-min: $light-text,
+  slider-off: rgba($light-text, 0.3),
+  slider-off-active: rgba($light-text, 0.3),
+); // Background config
+// Light bg
+$light-background: #1d2329;
+$light-bg-darker-5: darken($light-background, 5%);
+$light-bg-darker-10: darken($light-background, 10%);
+$light-bg-darker-20: darken($light-background, 20%);
+$light-bg-darker-30: darken($light-background, 30%);
+$light-bg-lighter-5: lighten($light-background, 5%);
+$dark-bg-tooltip: lighten($white, 20%);
+$dark-bg-alpha-4: rgba($white, 0.04);
+$dark-bg-alpha-12: rgba($white, 0.12);
+$mat-light-theme-background: (
+  background: $light-background,
+  status-bar: $light-bg-darker-20,
+  app-bar: $light-bg-darker-5,
+  hover: $dark-bg-alpha-4,
+  card: $light-bg-lighter-5,
+  dialog: $light-bg-lighter-5,
+  tooltip: $dark-bg-tooltip,
+  disabled-button: $dark-bg-alpha-12,
+  raised-button: $light-bg-lighter-5,
+  focused-button: $dark-focused,
+  selected-button: $light-bg-darker-20,
+  selected-disabled-button: $light-bg-darker-30,
+  disabled-button-toggle: $light-bg-darker-10,
+  unselected-chip: $light-bg-darker-10,
+  disabled-list-option: $light-bg-darker-10,
+); // Dark bg
+$dark-background: $white;
+$dark-bg-lighter-5: lighten($dark-background, 5%);
+$dark-bg-lighter-10: lighten($dark-background, 10%);
+$dark-bg-lighter-20: lighten($dark-background, 20%);
+$dark-bg-lighter-30: lighten($dark-background, 30%);
+$light-bg-alpha-4: rgba(#1d2329, 0.04);
+$light-bg-alpha-12: rgba(#1d2329, 0.12); // Background palette for dark themes.
+$mat-dark-theme-background: (
+  background: $dark-background,
+  status-bar: $dark-bg-lighter-20,
+  app-bar: $dark-bg-lighter-5,
+  hover: $light-bg-alpha-4,
+  card: $dark-bg-lighter-5,
+  dialog: $dark-bg-lighter-5,
+  tooltip: $dark-bg-lighter-20,
+  disabled-button: $light-bg-alpha-12,
+  raised-button: $dark-bg-lighter-5,
+  focused-button: $light-focused,
+  selected-button: $dark-bg-lighter-20,
+  selected-disabled-button: $dark-bg-lighter-30,
+  disabled-button-toggle: $dark-bg-lighter-10,
+  unselected-chip: $dark-bg-lighter-20,
+  disabled-list-option: $dark-bg-lighter-10,
+); // Compute font config
+@include mat-core($fontConfig); // Theme Config
+
+body {
+  --primary-color: #1d2329;
+  --primary-lighter-color: #181d22;
+  --primary-darker-color: #3b4349;
+  --text-primary-color: #{$light-primary-text};
+  --text-primary-lighter-color: #{$light-primary-text};
+  --text-primary-darker-color: #{$light-primary-text};
+}
+$mat-primary: (
+  main: #cfd4db,
+  lighter: $white,
+  darker: #adb1b7,
+  200: #1d2329, // For slide toggle,
+  contrast: (main: $light-primary-text, lighter: $light-primary-text, darker: $light-primary-text,)
+);
+$theme-primary: mat-palette($mat-primary, main, lighter, darker);
+
+body {
+  --accent-color: #797979;
+  --accent-lighter-color: #d7d7d7;
+  --accent-darker-color: #5c5c5c;
+  --text-accent-color: #{$light-primary-text};
+  --text-accent-lighter-color: #{$dark-primary-text};
+  --text-accent-darker-color: #{$light-primary-text};
+}
+$mat-accent: (
+  main: #797979,
+  lighter: #d7d7d7,
+  darker: #5c5c5c,
+  200: #797979, // For slide toggle,
+  contrast: (main: $light-primary-text, lighter: $dark-primary-text, darker: $light-primary-text,)
+);
+$theme-accent: mat-palette($mat-accent, main, lighter, darker);
+
+body {
+  --warn-color: #ff0000;
+  --warn-lighter-color: #ffb3b3;
+  --warn-darker-color: #ff0000;
+  --text-warn-color: #{$light-primary-text};
+  --text-warn-lighter-color: #{$dark-primary-text};
+  --text-warn-darker-color: #{$light-primary-text};
+}
+$mat-warn: (
+  main: #ff0000,
+  lighter: #ffb3b3,
+  darker: #ff0000,
+  200: #ff0000, // For slide toggle,
+  contrast: (main: $light-primary-text, lighter: $dark-primary-text, darker: $light-primary-text,)
+);
+$theme-warn: mat-palette($mat-warn, main, lighter, darker);
+$theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+$altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn); // Theme Init
+@include angular-material-theme($theme);
+
+.theme-alternate {
+  @include angular-material-theme($altTheme);
+}
+// Specific component overrides, pieces that are not in line with the general theming
+// Handle buttons appropriately, with respect to line-height
+
+.mat-flat-button,
+.mat-raised-button,
+.mat-stroked-button {
+  padding: 0 1.15em;
+  margin: 0 0.65em;
+  min-width: 3em;
+  line-height: 36.4px;
+}
+
+.mat-standard-chip {
+  padding: 0.5em 0.85em;
+  min-height: 2.5em;
+}
+
+.material-icons {
+  font-size: 24px!important;
+  font-family: 'Material Icons', 'Material Icons';
+
+  .mat-badge-content {
+    font-family: 'Roboto';
+  }
+}
+//CUSTOM From style.css
+
+body,
+html {
+  height: 100%;
+  padding-bottom: 50px;
+  font-family: Roboto, sans-serif;
+  color: $textactive;
+  background-color: $bgmain;
+  font-weight: 300;
+}
+
+a {
+  color: $textactive;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn {
+  font-weight: 300;
+
+  &.btn-dark2 {
+    color: $textactive;
+    background-color: $dark;
+
+    &:hover {
+      background-color: $primary;
+    }
+  }
+
+  &.btn-success {
+    color: $white;
+  }
+
+  &.btn-go {
+    font-weight: 500;
+    font-size: 25px;
+    text-transform: uppercase;
+    padding: 20px 100px;
+  }
+
+  &.btn-save-project {
+    &.mat-warn {
+      background-color: $primary;
+    }
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+
+  .mat-icon {
+    font-size: 16px !important;
+    vertical-align: middle;
+    width: 16px;
+    height: 18px;
+  }
+}
+
+footer {
+  // position: fixed;
+  bottom: 0;
+  width: 100%;
+  color: $textactive;
+  font-size: 14px;
+
+  .material-icons {
+    vertical-align: text-top;
+    font-size: 16px!important;
+  }
+
+  .contact {
+    .faq-link {
+      margin-right: 25px;
+    }
+  }
+
+  .version {
+    font-size: 12px;
+    font-weight: 300;
+  }
+}
+
+.mat-icon {
+  vertical-align: bottom;
+}
+
+.min-height {
+  min-height: calc(100vh - 330px);
+}
+
+.navbar {
+  border-bottom: 2px solid $bgactive!important;
+  padding: 0 1rem;
+
+  .navbar-brand {
+    margin-right: 3rem;
+  }
+
+  .nav-item {
+    position: relative;
+
+    .nav-link {
+      position: relative;
+      padding: 0 1.5rem !important;
+      color: $textactive!important;
+
+      &.active,
+      &:hover {
+        color: $white!important;
+
+        &:before {
+          background-color: $primary;
+        }
+      }
+
+      &:before {
+        content: "";
+        position: absolute;
+        height: 2px;
+        background-color: transparent;
+        bottom: -40px;
+        width: 100%;
+        left: 0;
+      }
+    }
+  }
+
+  .dropdown-menu {
+    .dropdown-item {
+      cursor: pointer;
+    }
+  }
+
+  .header-search {
+    .form-control {
+      border: none;
+      padding-left: 3rem;
+      background-color: $bgactive;
+      border-radius: 20px;
+      color: $white;
+      max-width: 210px;
+
+      &::placeholder {
+        color: $textcontent;
+      }
+
+      &:focus {
+        border: none;
+        box-shadow: none;
+      }
+    }
+
+    .material-icons {
+      position: absolute;
+      z-index: 2;
+      display: block;
+      width: 3rem;
+      height: 2.4rem;
+      line-height: 2.4rem;
+      text-align: center;
+      pointer-events: none;
+      color: $textcontent;
+    }
+  }
+}
+
+.new-project {
+  right: 0;
+  z-index: 2;
+  top: -10px;
+}
+
+.custom-list {
+  .mat-tab-header {
+    padding-bottom: 40px;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .mat-tab-labels {
+    .mat-tab-label {
+      font-size: 1rem;
+      opacity: 1!important;
+      margin: 0 15px 0 0;
+      width: auto;
+      min-width: auto;
+      height: auto;
+      padding: 0 15px 0 0;
+      position: relative;
+      border-right: 1px solid $textcontent;
+
+      &:last-child {
+        border-right: none;
+      }
+
+      .mat-tab-label-content {
+        color: $textcontent!important;
+      }
+
+      &.mat-tab-label-active {
+        .mat-tab-label-content {
+          color: $white!important;
+          border-bottom: 2px solid $primary;
+        }
+      }
+    }
+  }
+
+  .mat-list,
+  .mat-selection-list {
+    padding: 0;
+
+    .mat-list-item {
+      border-bottom: 1px solid $bgactive;
+
+      &:first-child {
+        border-top: 1px solid $bgactive;
+      }
+
+      .mat-list-item-content {
+        padding: 0 10px;
+        color: $textactive;
+        font-weight: 300;
+        .project-name {
+          font-weight: 300;
+
+          .mat-icon {
+            margin-right: 10px;
+          }
+        }
+
+        .mat-list-text {
+          flex-direction: row;
+        }
+
+        .actions-links {
+          .mat-button,
+          .mat-icon-button {
+            color: $textactive;
+          }
+        }
+      }
+    }
+  }
+
+  .edit-project {
+    border-radius: 0;
+    border-right: 1px solid $bgactive;
+  }
+
+  .mat-ink-bar {
+    display: none!important;
+  }
+  .header-list {
+    border-top: none!important;
+    height: 30px!important;
+    font-size: 13px;
+
+    .project-name {
+      padding: 0 0 0 35px;
+    }
+    &.mat-list-option{
+      border: none;
+    }
+    &.row{
+      .project-name {
+        padding: 0 0 0 42px;
+      }
+    }
+  }
+  &.media-list {
+    .mat-tab-labels {
+      .mat-tab-label {
+        &:last-child {
+          .mat-tab-label-content {
+            border: none;
+          }
+        }
+
+        &:nth-of-type(2) {
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+.upload-files {
+  .drop-zone {
+    h4 {
+      color: $textcontent;
+    }
+  }
+
+  .upload-list {
+    .thead-dark {
+      th {
+        color: $textcontent;
+        font-weight: 300;
+        padding: 0.3rem 0.75rem;
+        border: none;
+      }
+    }
+
+    td {
+      color: $textcontent;
+      font-weight: 300;
+      border: none;
+    }
+  }
+}
+
+.custom-drop-list {
+  .list-group-item {
+    color: $textcontent;
+    background-color: transparent;
+    border-top: none;
+    border-left: none;
+    border-bottom: 1px dashed $bgactive;
+    font-weight: 300;
+
+    &.active {
+      margin-top: 0;
+      border-top-width: 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:first-child {
+      border-top: 1px dashed $bgactive;
+    }
+
+  }
+  .cdk-drag-placeholder{
+    background-color: $bgsecondary;
+    color: $bgsecondary ;
+  }
+}
+
+.cdk-drag{
+  background-color: $bgmain;
+  color: $textcontent;
+}
+.mat-button,
+.mat-icon-button,
+.mat-menu-item {
+  &:focus {
+    outline: none;
+  }
+}
+
+.add-cue {
+  display: flex;
+  flex-direction: column;
+
+  .mat-button {
+    padding: 20px 0;
+    border-bottom: 1px solid $bgactive;
+    border-radius: 0;
+    color: $textcontent;
+
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+
+      .mat-icon {
+        width: 100%;
+        font-size: 35px !important;
+        display: block;
+        height: auto;
+      }
+
+      span {
+        text-transform: uppercase;
+        font-size: 12px;
+        line-height: 1;
+        margin-top: 5px;
+      }
+    }
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:hover {
+      color: $white;
+    }
+
+    &.mat-button-disabled {
+      color: $bgactive;
+
+      &:hover {
+        color: $bgactive;
+      }
+    }
+  }
+}
+
+.options-menu {
+  .mat-menu-item {
+    color: $textactive;
+    outline: none;
+
+    .mat-icon {
+      color: $textactive;
+    }
+  }
+}
+
+.trash-btns {
+  margin: 0 0 40px;
+
+  button {
+    margin-right: 25px;
+  }
+}
+
+.mat-tooltip {
+  color: $modaltext!important;
+  background-color: $modalbg!important;
+  font-size: 12px!important;
+}
+
+.mat-dialog-container {
+  background-color: $modalbg;
+  color: $modaltext;
+  position: relative;
+
+  .mat-focused .mat-form-field-label,
+  .mat-form-field-label {
+    color: $modaltext;
+  }
+
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: $modaltext;
+    }
+
+    .mat-form-field-outline-thick {
+      color: $modaltext;
+    }
+
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: $modaltext;
+      }
+    }
+  }
+
+  .mat-form-field-invalid .mat-input-element,
+  .mat-form-field.mat-warn .mat-input-element {
+    caret-color: $errorclr;
+  }
+
+  .mat-form-field-invalid.mat-form-field-invalid {
+    .mat-error,
+    .mat-form-field-invalid .mat-input-element,
+    .mat-form-field-label,
+    .mat-form-field-outline-thick,
+    .mat-form-field-required-marker {
+      color: $errorclr;
+    }
+  }
+
+  .mat-focused .mat-form-field-ripple,
+  .mat-form-field-underline {
+    background-color: $modaltext;
+  }
+
+  .mat-expansion-panel {
+    background-color: $modalbg;
+    color: $modaltext;
+
+    .mat-expansion-indicator::after,
+    .mat-expansion-panel-header-description,
+    .mat-expansion-panel-header-description {
+      color: $modaltext;
+    }
+  }
+
+  .mat-dialog-actions {
+    background-color: $dialog-actions;
+    margin: 0 -24px -24px;
+    padding: 15px 24px 15px 0;
+  }
+
+  .btn-light {
+    border: 1px solid #b5b5b5;
+    color: $modaltext;
+    background-color: transparent;
+  }
+
+  .mat-dialog-title {
+    line-height: 1.5;
+  }
+
+  .mat-select-arrow,
+  .mat-select-value,
+  .mat-tab-label {
+    color: $modaltext;
+  }
+
+  .mat-radio-outer-circle {
+    border-color: $modaltext;
+  }
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.file-ext {
+  border: 1px solid $bgactive;
+  padding: 5px 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  border-radius: 8px;
+}
+
+.mat-accent .mat-pseudo-checkbox-checked,
+.mat-accent .mat-pseudo-checkbox-indeterminate,
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate {
+  background: $primary;
+}
+
+.mat-pseudo-checkbox::after {
+  color: #FFF;
+}
+
+#main-tab-group {
+  height: 100%;
+}
+
+.main-container {
+  margin-top: 20px;
+}
+
+.img-logo {
+  width: 120px;
+}
+
+.with-icon {
+  display: flex;
+  align-items: center;
+}
+
+.warning-icon {
+  color: red;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.hide {
+  display: none;
+}
+
+.icon-dashboard {
+  background-image: url("./assets/img/ico_dashboard.png");
+  background-position: center center;
+}
+/* #messageArea {
+    color: $white;
+    background-color: #aaa;
+    border-radius: 10px;
+    padding-left: 0.75em;
+    padding-top: 0.1em;
+    height: 93%;
+    width: 98%;
+} */
+.example-box {
+  /* width: 50px; */
+  height: 40px;
+  border: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: move;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: $white;
+  border-radius: 4px;
+  margin-right: 25px;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.example-box:active {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cue-box {
+  padding: 0;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+/* animacion */
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fast {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}

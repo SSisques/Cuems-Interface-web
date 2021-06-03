@@ -44,7 +44,7 @@ export class ProyectosComponent implements OnInit{
               // this language will be used as a fallback when a translation isn't found in the current language
               this.translate.setDefaultLang('en');
               // the lang to use, if the lang isn't available, it will use the current loader to get them
-              this.translate.use('en');
+              //this.translate.use('en');
   }
 
 
@@ -71,7 +71,9 @@ export class ProyectosComponent implements OnInit{
               uuid: myKeys[0],
               name: recibo.value[index][this.myUuid[index]].name,
               unix_name: recibo.value[index][this.myUuid[index]].unix_name,
-              date: recibo.value[index][this.myUuid[index]].date
+              date: recibo.value[index][this.myUuid[index]].date,
+              created: recibo.value[index][this.myUuid[index]].created,
+              modified: recibo.value[index][this.myUuid[index]].modified
              });
 
         }
@@ -179,12 +181,14 @@ confirmDialog(idx: number, uuid: string): void {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '230px';
-  dialogConfig.width = '300px';
+  //dialogConfig.height = '230px';
+  //dialogConfig.width = '300px';
 
   dialogConfig.data = {
-    name: 'Estás a punto de borrar el proyecto ' + this.listaProyectos[idx].name,
-    msg: 'Confirmas borrarlo?'
+    name: this.translate.instant('delete')+ ' '+this.translate.instant('min.project')+ ': ' + this.listaProyectos[idx].name,
+    msg: this.translate.instant('delete.project'),
+    btnmsg: this.translate.instant('delete'),
+    btnclass: 'btn-danger'
 };
 
   const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
@@ -204,8 +208,8 @@ deleteSelected(type: string): void {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '250px';
-  dialogConfig.width = '350px';
+  //dialogConfig.height = 'auto';
+  //dialogConfig.width = '400px';
 
 
   if (this.selected.length <= 0) {
@@ -214,14 +218,18 @@ deleteSelected(type: string): void {
   } else if (this.selected.length > 1) {
     // console.log('plural');
     dialogConfig.data = {
-      name: 'Estás a punto de borrar definitivamente una selección de proyectos.',
-      msg: 'Confirmamos borrarlos?'
+      name: this.translate.instant('delete.permanently'),
+      msg: this.translate.instant('delete.permanently.projects'),
+      btnmsg: this.translate.instant('delete'),
+      btnclass: 'btn-danger'
     };
   } else {
     // console.log('uno');
     dialogConfig.data = {
-      name: 'Estás a punto de borrar definitivamente un proyecto.',
-      msg: 'Confirmamos borrarlo?'
+      name: this.translate.instant('delete.permanently'),
+      msg: this.translate.instant('delete.permanently.project'),
+      btnmsg: this.translate.instant('delete'),
+      btnclass: 'btn-danger'
     };
   }
 
@@ -256,8 +264,8 @@ restoreSelected(): void {
   const dialogConfig = new MatDialogConfig();
   dialogConfig.disableClose = true;
   dialogConfig.autoFocus = true;
-  dialogConfig.height = '250px';
-  dialogConfig.width = '350px';
+  //dialogConfig.height = '250px';
+  //dialogConfig.width = '350px';
 
   if (this.selected.length <= 0) {
     // console.log('nada seleccionado');
@@ -265,14 +273,18 @@ restoreSelected(): void {
   } else if (this.selected.length > 1) {
     // console.log('plural');
     dialogConfig.data = {
-      name: 'Está apunto de recuperar una selección de proyectos.',
-      msg: 'Confirmamos recuperarlos?'
+      name:this.translate.instant('restore'),
+      msg: this.translate.instant('restore.projects'),
+      btnmsg: this.translate.instant('accept'),
+      btnclass: 'btn-primary'
     };
   } else {
     // console.log('uno');
     dialogConfig.data = {
-      name: 'Está apunto de recuperar un proyecto.',
-      msg: 'Confirmamos recuperarlo?'
+      name:this.translate.instant('restore'),
+      msg: this.translate.instant('restore.project'),
+      btnmsg: this.translate.instant('accept'),
+      btnclass: 'btn-primary'
     };
   }
 

@@ -1,15 +1,24 @@
-<footer class="p-2 bg-dark text-white pull-right">
-    <div class="row">
-        <div class="col-5">CueMs V0.0.1.6 by
-            <a href="https://github.com/stagesoft ">StageSoft</a>
-        </div>
-        <div class="col text-right">
-            <span>
-                Estado de la conexión webSocket:
-            <span *ngIf="wsService.isConnected" class="text-success">Online</span>
-            <span *ngIf="!wsService.isConnected" class="text-danger">Offline</span> Users
-            <span class="text-success">{{ this.users }}</span>
-            </span>
-        </div>
+<footer class="mt-5 p-2 pull-right">
+  <div class="container">
+  <div class="row">
+    <div class="col-7 social text-center">
+      Formitgo is a Stagelab Coop project · <a href="#">Follow us on Twitter</a> · <a href="#">Instagram</a> · <a href="#">Github</a>
     </div>
+    <div class="col-5 contact text-center">
+      <a href="#" class="faq-link"><mat-icon aria-hidden="false" aria-label="help icon">help</mat-icon> F.A.Q</a> <a href="#" class="contact-link"><mat-icon aria-hidden="false" aria-label="email icon">email</mat-icon> Contact</a>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col text-center copyright">
+      © 2020 Stagelab · Made with <mat-icon>favorite</mat-icon> from Lleida · <a href="#">Legal Advice</a> · <a href="#">Cookies Policy</a>
+    </div>
+  </div>
+  <div class="row mt-3 version">
+    <div class="col-12 text-center">
+      CueMs V0.0.1.6 by <a href="https://github.com/stagesoft ">StageSoft</a> · WebSocket: <span *ngIf="wsService.isConnected" class="text-success">Online</span><span *ngIf="!wsService.isConnected" class="text-danger">Offline</span> <mat-icon aria-hidden="false" aria-label="person icon">person</mat-icon> <span class="text-success">{{ this.users }}</span>
+
+    </div>
+  </div>
+</div>
+
 </footer>

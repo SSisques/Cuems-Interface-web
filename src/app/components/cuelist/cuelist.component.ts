@@ -53,10 +53,10 @@ export class CueListComponent implements OnInit, AfterViewInit {
                   this.recibimosWs(); // recibimos la respuesta del servidor
                 }
     FULL_PATH: any[] = [];
-    nextCue; 
+    nextCue;
     timecode;
    // Conexion websocket deserialized
-   
+
   wsRealtime = webSocket({
     url: 'wss://dev.stagelab.net/realtime',
     deserializer: (data: any) => this.in_message(data),
@@ -65,7 +65,7 @@ export class CueListComponent implements OnInit, AfterViewInit {
     });
 
     in_message(mess: any) {
-    
+
       if (mess.data instanceof ArrayBuffer) {
         let dataView = new DataView(mess.data);
         const msg = new OSC.Message();
@@ -92,14 +92,14 @@ export class CueListComponent implements OnInit, AfterViewInit {
             if (msg.args[0] === '') {
               this.unselectCue();
             }
-            
+
           break;
           case '/engine/status/timecode':
             this.timecode = parseInt(msg.args[0], 10);
             this.timecode = this.timecode / 1000;
             // console.log(this.timecode);
           break;
-        
+
           default:
             break;
         }
@@ -113,15 +113,15 @@ export class CueListComponent implements OnInit, AfterViewInit {
     }
 
     realTime(){
-  
+
       this.wsRealtime.subscribe( // nos conectamos al realtime
         data => {
         });
       // console.log('realtime');
-      
-      
+
+
       // this.wsRealtime.next('/'); // emitimos el mensage por el ws
-      
+
       }
 
   // objeto que compartimos con el navbar
@@ -224,14 +224,14 @@ despligue_state = false;
  };
 
  public nodeList: NodeList = { // Listado de nodos y salidas
-  
-  number_of_nodes: 0, 
-	default_audio_input: '', 
-	default_audio_output: '', 
-	default_video_input: '', 
-	default_video_output: '', 
-	default_dmx_input: '', 
-	default_dmx_output: '', 
+
+  number_of_nodes: 0,
+	default_audio_input: '',
+	default_audio_output: '',
+	default_video_input: '',
+	default_video_output: '',
+	default_dmx_input: '',
+	default_dmx_output: '',
 	nodes: []
  };
 
@@ -376,7 +376,7 @@ despligue_state = false;
 
           // console.log(this.audioOutputList);
           // console.log(this.videoOutputList);
-           
+
       // }
           break;
      }
@@ -425,11 +425,11 @@ despligue_state = false;
         this.alertService.success('Despliqgue realizado ', options);
         this.despligue_state = true;
       }
-      
+
       break;
    }
   //    case 'project_load': {
-       
+
   //     // console.log(recibo.value);
   //     // if (recibo.value.uuid === this.cueMs.uuid){
   //       // this.proService.changeEditing(this.edit); // enlace con navbar posicionamiento en modo edit
@@ -664,6 +664,10 @@ saveProject(): void{
   this.edit.guardar = false; // reseteamos el valor que compartimos con navbar
   this.edit.estiloGuardar = ''; // reseteamos el estilo que compartimos con navbar
 }
+preferences(): void {
+  this.edit.preferences = true;
+  this.proService.changeEditing(this.edit);
+}
 duration(cue): string{
   if (this.contents[cue][this.tipoCue[cue]].Media !== null) { // si Media no es null
 
@@ -722,8 +726,8 @@ duration(cue): string{
         const newMediaName = data.media;
         const newInTime = data.in_time;
         const newOutTime = data.out_time;
-        const newOutputName = data.output_name; 
-        
+        const newOutputName = data.output_name;
+
 
         if (newMediaName !== null) {
           Media = {
@@ -816,7 +820,7 @@ duration(cue): string{
             ]
           }
         };
-        
+
         break;
         case 'VideoCue':
         newCue = {
@@ -1048,7 +1052,7 @@ const messageGo = new OSC.Message('/engine/command/go');
 const binaryGo = messageGo.pack();
 this.wsRealtime.next(binaryGo);
 // console.log(this.cueMs.CueList.contents);
-  
+
   } else {
     this.claseGo = 'btn h-100 btn-danger btn-block'; // Go en color rojo
     setTimeout(() => { this.claseGo = 'btn h-100 btn-outline-danger btn-block'; }, 500);
@@ -1077,12 +1081,12 @@ this.wsRealtime.next(binaryGo);
    if (this.despligue_state) {
     console.log('despliegue en teario realizado, volvemos a enviar la orden');
     this.wsService.wsEmit({action: 'project_deploy', value: this.cueMs.uuid});
-     
+
    } else {
     console.log('despliegue');
     this.wsService.wsEmit({action: 'project_deploy', value: this.cueMs.uuid});
    }
-  
+
 
  }
  hw_discovery(){
@@ -1093,15 +1097,15 @@ this.wsRealtime.next(binaryGo);
 
  selectCue( id: number ): void{ // cuando seleccionamos una cue
   if (this.edit.mode === true) { // si estamos en modo show
-    
+
     this.idCueSelected = id; // asignamos la id de la cue a actualizar para usarla en el submit
     this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
-  
+
   } else {
 
     this.idCueSelected = id; // asignamos la id de la cue a actualizar para usarla en el submit
     // this.claseGo = 'btn h-100 btn-primary btn-block'; // mostramos la class de go como cargada
-    
+
   }
 
 
@@ -1202,7 +1206,7 @@ initMode(value): void{
     this.readyGo = false;
     this.claseGo = 'btn h-100 btn-outline-danger btn-block';
     // console.log(this.edit.mode);
-    
+
   } else {
     this.proService.projectReady(this.cueMs.uuid);
   }
@@ -1220,12 +1224,14 @@ initMode(value): void{
    const dialogConfig = new MatDialogConfig();
    dialogConfig.disableClose = true;
    dialogConfig.autoFocus = true;
-   dialogConfig.height = '200px';
-   dialogConfig.width = '300px';
+   //dialogConfig.height = '200px';
+   //dialogConfig.width = '300px';
 
    dialogConfig.data = {
-    name: 'Estás a punto de borrar la cue ' + this.contents[idx][this.tipoCue[idx]].name,
-    msg: 'Confirmas borrarla?'
+    name: 'Delete: '+this.contents[idx][this.tipoCue[idx]].name,
+    msg: 'This will delete this cue. Are you sure?',
+    btnmsg: 'Delete',
+    btnclass: 'btn-danger'
  };
 
    const dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
@@ -1243,8 +1249,8 @@ initMode(value): void{
 
  editCueDialog(): void {
 //  console.log(this.mediaList);
-if (this.edit.mode === true) { // si no estamos en modo edit 
-  
+if (this.edit.mode === true) { // si no estamos en modo edit
+
 } else {
   let Media;
 
@@ -1254,7 +1260,7 @@ if (this.edit.mode === true) { // si no estamos en modo edit
   const callMedia = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Media;
   const outPuts = this.contents[this.idCueSelected][this.tipoCue[this.idCueSelected]].Outputs[0];
   let output_name;
-  
+
   // console.log(commonProperties.description);
   // let cueMedia = false;
 
@@ -1295,7 +1301,7 @@ if (this.edit.mode === true) { // si no estamos en modo edit
       post_go     : commonProperties.post_go,
       media       : callMedia,
       output_name : output_name,
-  
+
       // in_time     : region.in_time.CTimecode,
       // out_time    : region.out_time.CTimecode,
       mediaList   : this.mediaList,
@@ -1331,11 +1337,11 @@ if (this.edit.mode === true) { // si no estamos en modo edit
           this.color_despligue = 'warn'; // resaltamos alerta de despligue
 
           // console.log(data.output_name);
-          
+
 
           if (data.media !== null && data.media !== 'Sin media') {
             Media = {
-              file_name: data.media,  
+              file_name: data.media,
               regions: [{
                 region: {
                 id: 0,
@@ -1390,8 +1396,8 @@ preferencesDialog(): void {
    const dialogConfig = new MatDialogConfig();
    dialogConfig.disableClose = true;
    dialogConfig.autoFocus = true;
-   dialogConfig.height = '400px';
-   dialogConfig.width = '800px';
+   //dialogConfig.height = '400px';
+   //dialogConfig.width = '800px';
 
    dialogConfig.data = {
     accion : 'edit',

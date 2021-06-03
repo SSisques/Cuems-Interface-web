@@ -1,52 +1,43 @@
 <!-- <div *ngIf="accion == 'new' || accion == 'duplicated' ; then newBlock else editBlock"></div> -->
 <ng-template [ngIf]="accion == 'new' || accion == 'duplicated'" #newBlock>
-    <h1 mat-dialog-title [hidden]="accion == 'duplicated'">{{ 'new.project.title' | translate }}</h1>
-    <h1 mat-dialog-title [hidden]="accion == 'new'">Duplicando proyecto </h1>
+  <h1 mat-dialog-title [hidden]="accion == 'duplicated'">{{ 'new.project.title' | translate }}</h1>
+  <!-- <h1 mat-dialog-title [hidden]="accion == 'new'">Duplicando proyecto </h1> -->
+  <mat-dialog-content>
+    <form autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
+      <mat-accordion [hidden]="!stepTwo">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              {{ 'new.project.unix_name.label' | translate }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
-    <div class="p-4">
-        <form autocomplete="off" [formGroup]="editForm" (ngSubmit)="save()">
-            <mat-accordion [hidden]="!stepTwo">
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-description>
-                            {{ 'new.project.unix_name.label' | translate }}
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-
-                    <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>{{ 'new.project.unix_name' | translate }}</mat-label>
-                        <input matInput [class.text-right]="duplicated" formControlName="unix_name" (blur)="editUnixName()" #unix_nombre required>
-                        <mat-hint align="end">{{unix_nombre.value.length}} / 60</mat-hint>
-                        <mat-error *ngIf="this.editForm.controls.unix_name.invalid">{{getUnix_nameErrorMessage()}}</mat-error>
-                    </mat-form-field>
-                </mat-expansion-panel>
-                &nbsp;
-            </mat-accordion>
-
-            <mat-dialog-content>
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ 'new.project.name' | translate }}</mat-label>
-                    <input matInput formControlName="name" placeholder="{{ 'new.project.name.placeholder' | translate }}" (blur)="toUnixName()" #nombre required>
-                    <mat-hint align="end">{{nombre.value.length}} / 60</mat-hint>
-                    <mat-error *ngIf="this.editForm.controls.name.invalid">{{getNameErrorMessage()}}</mat-error>
-                </mat-form-field>
-                <br>
-                <mat-form-field class="full-width">
-                    <mat-label>{{ 'new.project.description' | translate }}</mat-label>
-                    <textarea matInput formControlName="description" placeholder="{{ 'new.project.description.placeholder' | translate }}" #message></textarea>
-                    <mat-hint align="end">{{message.value.length}} / 255</mat-hint>
-                    <mat-error *ngIf="this.editForm.controls.description.invalid">{{getDescriptionErrorMessage()}}</mat-error>
-                </mat-form-field>
-
-            </mat-dialog-content>
-            &nbsp;
-
-
-        </form>
-    </div>
-
-    <mat-card-actions>
-        <button mat-raised-button type="submit" color="primary" [disabled]="editForm.invalid" (click)="save()">{{ 'new.project.confirm' | translate }}</button>&nbsp;
-        <button mat-raised-button type="button" color="primary" (click)="close()">{{ 'new.project.cancel' | translate }}</button>
-    </mat-card-actions>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'new.project.unix_name' | translate }}</mat-label>
+            <input matInput [class.text-right]="duplicated" formControlName="unix_name" (blur)="editUnixName()" #unix_nombre required>
+            <mat-hint align="end">{{unix_nombre.value.length}} / 60</mat-hint>
+            <mat-error *ngIf="this.editForm.controls.unix_name.invalid">{{getUnix_nameErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'new.project.name' | translate }}</mat-label>
+        <input matInput formControlName="name" placeholder="{{ 'new.project.name.placeholder' | translate }}" (blur)="toUnixName()" #nombre required>
+        <mat-hint align="end">{{nombre.value.length}} / 60</mat-hint>
+        <mat-error *ngIf="this.editForm.controls.name.invalid">{{getNameErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field class="full-width">
+        <mat-label>{{ 'new.project.description' | translate }}</mat-label>
+        <textarea matInput formControlName="description" placeholder="{{ 'new.project.description.placeholder' | translate }}" #message></textarea>
+        <mat-hint align="end">{{message.value.length}} / 255</mat-hint>
+        <mat-error *ngIf="this.editForm.controls.description.invalid">{{getDescriptionErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="btn btn-light px-4 py-2 mr-4" type="button" (click)="close()">{{ 'cancel' | translate }}</button>
+    <button class="btn btn-primary px-4 py-2" type="submit" [disabled]="editForm.invalid" (click)="save()">{{ 'new.project.confirm' | translate }}</button>
+  </mat-dialog-actions>
 </ng-template>

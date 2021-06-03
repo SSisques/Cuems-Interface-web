@@ -38,6 +38,8 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 
@@ -111,7 +113,7 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     UnixNamePipe,
     NewProjectComponent,
     DessingComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -120,6 +122,8 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     FormsModule,
     ReactiveFormsModule,
     APP_ROUTING,
+    MatToolbarModule,
+    MatSidenavModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -155,7 +159,7 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
     EditCueComponent,
     ConfirmDialogComponent
   ],
-  schemas: [ 
+  schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ]
 })

@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>{{inData.name}}</h1>
 <div mat-dialog-content>
-    <p>{{inData.msg}}</p>
+    <p class="mb-4">{{inData.msg}}</p>
 </div>
-<div mat-dialog-actions>
-    <button mat-button (click)="close()">Cancelar</button>
-    <button mat-button (click)="confirm()" cdkFocusInitial>Adelante</button>
+<div mat-dialog-actions align="end">
+    <button class="btn btn-light px-4 py-2 mr-4" (click)="close()">{{ 'cancel' | translate }}</button>
+    <button class="btn {{inData.btnclass}} px-4 py-2" (click)="confirm()" cdkFocusInitial>{{inData.btnmsg}}</button>
 </div>

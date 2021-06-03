@@ -109,6 +109,8 @@ export interface ListaProyectos {
   name: string;
   unix_name: string;
   date: string;
+  created: string;
+  modified: string;
 }
 export interface CuemsProject {
   CuemsScript: CuemsScript;
@@ -254,5 +256,3 @@ export interface CTimecode {
 //   id: number; // número de canal
 //   value: number; // 0 a 255 intensidad
 // }
-
-
