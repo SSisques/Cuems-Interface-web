@@ -7,6 +7,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { AlertService } from '../../_alert';
 import { MatSelectionList } from '@angular/material/list';
+import { NodesService, NodeList } from '../../servicios/nodes.service'; 
 
 @Component({
   selector: 'app-media',
@@ -34,6 +35,7 @@ export class MediaComponent implements OnInit {
               private fileService: FilesService,
               private wsService: WebsocketService,
               private dialog: MatDialog,
+              private nodesService: NodesService,
               public alertService: AlertService
               )
               {

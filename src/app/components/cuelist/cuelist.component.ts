@@ -235,8 +235,8 @@ despligue_state = false;
 	nodes: []
  };
 
- audioOutputList: any[] = [];
- videoOutputList: any[] = [];
+ audioOutputList: any[] = this.nodesService.audioOutputList;
+ videoOutputList: any[] = this.nodesService.videoOutputList;
 
  contents: Contents[] = [];
 
@@ -338,48 +338,48 @@ despligue_state = false;
       }
         break;
     }
-        case 'initial_mappings': {
-          // console.log(recibo.value);
-          const nodeList = recibo.value; // parseamos la entada
+    //     case 'initial_mappings': {
+    //       // console.log(recibo.value);
+    //       const nodeList = recibo.value; // parseamos la entada
 
-          for (let index = 0; index < recibo.value.nodes.length; index++) {
+    //       for (let index = 0; index < recibo.value.nodes.length; index++) {
 
-            this.audioOutputList.push({
-              // uuid: recibo.value.nodes[index].uuid,
-              output: recibo.value.default_audio_output,
-              name: 'Nodo ' + index + ' salida por defecto'  });
+    //         this.audioOutputList.push({
+    //           // uuid: recibo.value.nodes[index].uuid,
+    //           output: recibo.value.default_audio_output,
+    //           name: 'Nodo ' + index + ' salida por defecto'  });
 
-            this.videoOutputList.push({
-              // uuid: recibo.value.nodes[index].uuid,
-              output: recibo.value.default_video_output,
-              name: 'Nodo ' + index + ' salida por defecto'});
+    //         this.videoOutputList.push({
+    //           // uuid: recibo.value.nodes[index].uuid,
+    //           output: recibo.value.default_video_output,
+    //           name: 'Nodo ' + index + ' salida por defecto'});
 
-            for (let index2 = 0; index2 < recibo.value.nodes[index].audio.outputs.length; index2++) {
+    //         for (let index2 = 0; index2 < recibo.value.nodes[index].audio.outputs.length; index2++) {
 
-              this.audioOutputList.push({ // hacemos el push de los proyectos al listado
-              //uuid: recibo.value.nodes[index].uuid,
-              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].audio.outputs[index2].name,
-              name: 'Nodo ' + index + ' salida ' + index2
-              });
+    //           this.audioOutputList.push({ // hacemos el push de los proyectos al listado
+    //           //uuid: recibo.value.nodes[index].uuid,
+    //           output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].audio.outputs[index2].name,
+    //           name: 'Nodo ' + index + ' salida ' + index2
+    //           });
 
-            }
-            for (let index2 = 0; index2 < recibo.value.nodes[index].video.outputs.length; index2++) {
+    //         }
+    //         for (let index2 = 0; index2 < recibo.value.nodes[index].video.outputs.length; index2++) {
 
-              this.videoOutputList.push({ // hacemos el push de los proyectos al listado
-              //uuid: recibo.value.nodes[index].uuid,
-              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].video.outputs[index2].name,
-              name: 'Nodo ' + index + ' salida ' + index2
-              });
+    //           this.videoOutputList.push({ // hacemos el push de los proyectos al listado
+    //           //uuid: recibo.value.nodes[index].uuid,
+    //           output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].video.outputs[index2].name,
+    //           name: 'Nodo ' + index + ' salida ' + index2
+    //           });
 
-            }
-        }
+    //         }
+    //     }
 
-          // console.log(this.audioOutputList);
-          // console.log(this.videoOutputList);
+    //       // console.log(this.audioOutputList);
+    //       // console.log(this.videoOutputList);
            
-      // }
-          break;
-     }
+    //   // }
+    //       break;
+    //  }
         case 'project_save': {
 
           const options = {

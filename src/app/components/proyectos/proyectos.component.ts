@@ -8,6 +8,7 @@ import { AlertService } from '../../_alert';
 import { MatSelectionList } from '@angular/material/list';
 import { TranslateService } from '@ngx-translate/core';
 import { NewProjectComponent } from '../new-project/new-project.component';
+import { NodesService } from '../../servicios/nodes.service';
 
 
 
@@ -36,6 +37,7 @@ export class ProyectosComponent implements OnInit{
               private router: Router,
               private wsService: WebsocketService,
               private dialog: MatDialog,
+              private nodesService: NodesService,
               public alertService: AlertService
               ) {
               this.proService.project_List();
