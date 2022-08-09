@@ -19,8 +19,8 @@ export class OscService {
 
     // Conexion websocket deserialized
     public wsRealtime = webSocket({
-    url: 'wss://dev.stagelab.net/realtime',
-    // url: 'wss://master.local/realtime',
+    // url: 'wss://dev.stagelab.net/realtime',
+    url: 'wss://192.168.6.1/realtime',
     deserializer: (data: any) => this.in_message(data),
     serializer: (msg: any) => msg,
     binaryType: 'arraybuffer'

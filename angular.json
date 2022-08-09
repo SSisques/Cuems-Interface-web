@@ -25,6 +25,7 @@
                         ],
                         "styles": [
                             "src/fonts/Roboto.css",
+                            "node_modules/material-design-icons/iconfont/material-icons.css",
                             "src/styles.scss"
                         ],
                         "scripts": [
@@ -34,7 +35,9 @@
                             "node_modules/osc-js/lib/osc.js",
                             "node_modules/js-cookie/src/js.cookie.js"
                         ],
-                        "allowedCommonJsDependencies": ["crypto-js"]
+                        "allowedCommonJsDependencies": [
+                            "crypto-js"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -129,9 +132,11 @@
     },
     "defaultProject": "cuems",
     "schematics": {
-      "@schematics/angular:component": {
-        "styleext": "scss"
-      }
+        "@schematics/angular:component": {
+            "styleext": "scss"
+        }
+    },
+    "cli": {
+        "analytics": false
     }
-
 }
