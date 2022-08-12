@@ -2,12 +2,14 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProyectosService, ListaProyectos } from '../../servicios/proyectos.service';
 import { WebsocketService } from '../../servicios/websocket.service';
+import { NodesService, NodeList } from '../../servicios/nodes.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { AlertService } from '../../_alert';
 import { MatSelectionList } from '@angular/material/list';
 import { TranslateService } from '@ngx-translate/core';
 import { NewProjectComponent } from '../new-project/new-project.component';
+
 
 
 
@@ -35,6 +37,7 @@ export class ProyectosComponent implements OnInit{
               private translate: TranslateService,
               private router: Router,
               private wsService: WebsocketService,
+              public nodesService: NodesService,
               private dialog: MatDialog,
               public alertService: AlertService
               ) {
@@ -57,6 +60,28 @@ export class ProyectosComponent implements OnInit{
       const recibo: any = msg; // asignamos un tipado para que no nos de error typescript
 
       switch (recibo.type) {
+        case 'initial_mappings': {
+
+          this.nodesService.add_mappings(recibo.value);
+
+          // console.log(this.nodesService.nodeList);
+          // console.log(recibo.value);
+
+          // public nodeList: NodeList = { // Listado de nodos y salidas
+
+          //   number_of_nodes: 0,
+          //   default_audio_input: '',
+          //   default_audio_output: '',
+          //   default_video_input: '',
+          //   default_video_output: '',
+          //   default_dmx_input: '',
+          //   default_dmx_output: '',
+          //   nodes: []
+          //  };
+
+          // console.log(recibo.value);
+          break;
+        }
         case 'project_list': {
           this.listaProyectos = [];
           this.myUuid = []; // limpiamos array
@@ -149,7 +174,7 @@ updateProjectList(): void {
       const options = {
         autoClose: true
       };
-      this.alertService.success('Listo de proyectos actualizado', options);
+      this.alertService.success('Lista de proyectos actualizada', options);
     }
   }
 updateProjectTrashList(): void {

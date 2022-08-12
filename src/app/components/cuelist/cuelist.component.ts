@@ -5,7 +5,7 @@ import { OscService } from '../../servicios/osc.service'; // importamos el servi
 import { WebsocketService } from '../../servicios/websocket.service';
 import { ProyectosService, CuemsProject, CuemsScript, CueList, AudioCue, Contents } from '../../servicios/proyectos.service';
 import { FilesService, FileList} from '../../servicios/files.service';
-import { NodesService, NodeList } from '../../servicios/nodes.service'; // importamos el servicio osc
+import { NodesService, NodeList } from '../../servicios/nodes.service';
 import { v1 as uuidv1 } from 'uuid'; // importamos el generador v1 de uuid https://www.npmjs.com/package/uuid
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AlertService } from '../../_alert';
@@ -34,7 +34,7 @@ export class CueListComponent implements OnInit, AfterViewInit {
               private wsService: WebsocketService,
               private proService: ProyectosService,
               private fileService: FilesService,
-              private nodesService: NodesService,
+              public  nodesService: NodesService,
               private fb: FormBuilder,
               public alertService: AlertService,
               private dialog: MatDialog
@@ -58,7 +58,7 @@ export class CueListComponent implements OnInit, AfterViewInit {
    // Conexion websocket deserialized
 
   wsRealtime = webSocket({
-    url: 'wss://dev.stagelab.net/realtime',
+    url: 'wss://192.168.6.1/realtime', // hay que cambiar aquí la ip del server si cambia
     deserializer: (data: any) => this.in_message(data),
     serializer: (msg: any) => msg,
     binaryType: 'arraybuffer'
@@ -223,17 +223,20 @@ despligue_state = false;
     }
  };
 
- public nodeList: NodeList = { // Listado de nodos y salidas
+  nodeList: NodeList[] = [ // Listado de nodos y salidas
 
-  number_of_nodes: 0,
-	default_audio_input: '',
-	default_audio_output: '',
-	default_video_input: '',
-	default_video_output: '',
-	default_dmx_input: '',
-	default_dmx_output: '',
-	nodes: []
- };
+  // number_of_nodes: 0,
+	// default_audio_input: '',
+	// default_audio_output: '',
+	// default_video_input: '',
+	// default_video_output: '',
+	// default_dmx_input: '',
+	// default_dmx_output: '',
+	// nodes: []
+
+];
+
+ nodosObject: any[] = [];
 
  audioOutputList: any[] = [];
  videoOutputList: any[] = [];
@@ -247,6 +250,8 @@ despligue_state = false;
 
  ngOnInit(): void {
   this.operatingSytem(); // detectamos el OS del usuario
+  // console.log(this.nodesService.nodeList);
+  this.nodesList();
  }
 
  ngAfterViewInit(): void { // esta funcion se ejecuta una vez cargada la pag
@@ -339,40 +344,11 @@ despligue_state = false;
         break;
     }
         case 'initial_mappings': {
+          
+          this.nodesService.add_mappings(recibo.value);
+          this.nodesList();
           // console.log(recibo.value);
-          const nodeList = recibo.value; // parseamos la entada
-
-          for (let index = 0; index < recibo.value.nodes.length; index++) {
-
-            this.audioOutputList.push({
-              // uuid: recibo.value.nodes[index].uuid,
-              output: recibo.value.default_audio_output,
-              name: 'Nodo ' + index + ' salida por defecto'  });
-
-            this.videoOutputList.push({
-              // uuid: recibo.value.nodes[index].uuid,
-              output: recibo.value.default_video_output,
-              name: 'Nodo ' + index + ' salida por defecto'});
-
-            for (let index2 = 0; index2 < recibo.value.nodes[index].audio.outputs.length; index2++) {
-
-              this.audioOutputList.push({ // hacemos el push de los proyectos al listado
-              //uuid: recibo.value.nodes[index].uuid,
-              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].audio.outputs[index2].name,
-              name: 'Nodo ' + index + ' salida ' + index2
-              });
-
-            }
-            for (let index2 = 0; index2 < recibo.value.nodes[index].video.outputs.length; index2++) {
-
-              this.videoOutputList.push({ // hacemos el push de los proyectos al listado
-              //uuid: recibo.value.nodes[index].uuid,
-              output   : recibo.value.nodes[index].uuid + '_' + recibo.value.nodes[index].video.outputs[index2].name,
-              name: 'Nodo ' + index + ' salida ' + index2
-              });
-
-            }
-        }
+         
 
           // console.log(this.audioOutputList);
           // console.log(this.videoOutputList);
@@ -465,6 +441,90 @@ despligue_state = false;
 //   this.cueMsCookie = JSON.parse(Cookies.get('cueMsCookie'));
 //   console.log(this.cueMsCookie.CueList);
 //  }
+
+ nodesList(): void{
+
+  // console.log("funciono");
+
+
+
+//  this.nodesService.getnodeList().subscribe( 
+//         nodeList =>  {
+
+//           this.nodeList = nodeList
+
+//         });
+
+  // this.objetoCuelist.push({
+  //   number_of_nodes: this.nodesService.objeto.number_of_nodes
+
+  // }); // parseamos la entada
+
+  this.nodeList.push({
+    number_of_nodes:     this.nodesService.nodeList[0].number_of_nodes,
+    default_audio_input: this.nodesService.nodeList[0].default_audio_input,
+    default_audio_output: this.nodesService.nodeList[0].default_audio_output,
+    default_video_input: this.nodesService.nodeList[0].default_video_input, 
+    default_video_output: this.nodesService.nodeList[0].default_video_output, 
+    default_dmx_input: this.nodesService.nodeList[0].default_dmx_input, 
+    default_dmx_output: this.nodesService.nodeList[0].default_dmx_output,
+    nodes: this.nodesService.nodeList[0].nodes
+
+  });
+
+
+  this.nodosObject.push(this.nodesService.nodeList[0].nodes);
+
+
+  // this.nodeList.push(this.nodesService.nodeList); // parseamos la entada
+
+  // this.nodeList = this.nodesService.nodeList;
+
+
+  // console.log(this.nodesService.nodeList[0].number_of_nodes);
+  // console.log(this.nodeList);
+  // console.log(this.nodosObject[0][0].audio);
+  
+
+  // console.log(this.nodeList.default_audio_output);
+
+  for (let index = 0; index < this.nodosObject.length; index++) {
+
+    // console.log(index);
+
+    this.audioOutputList.push({      
+      // uuid: recibo.value.nodes[index].uuid,
+      output: this.nodeList[0].default_audio_output,
+      name: 'Nodo ' + index + ' salida por defecto'  });
+
+    this.videoOutputList.push({
+      // uuid: recibo.value.nodes[index].uuid,
+      output: this.nodeList[0].default_video_output,
+      name: 'Nodo ' + index + ' salida por defecto'});
+
+    for (let index2 = 0; index2 < this.nodosObject[0][index].audio.outputs.length; index2++) {
+
+      this.audioOutputList.push({ // hacemos el push de los proyectos al listado
+      //uuid: recibo.value.nodes[index].uuid,
+      output   : this.nodosObject[0][index].uuid + '_' + this.nodosObject[0][index].audio.outputs[index2].name,
+      name: 'Nodo ' + index + ' salida ' + index2
+      });
+
+    }
+    for (let index2 = 0; index2 < this.nodosObject[0][index].video.outputs.length; index2++) {
+
+      this.videoOutputList.push({ // hacemos el push de los proyectos al listado
+      //uuid: recibo.value.nodes[index].uuid,
+      output   : this.nodosObject[0][index].uuid + '_' + this.nodosObject[0][index].video.outputs[index2].name,
+      name: 'Nodo ' + index + ' salida ' + index2
+      });
+
+    }
+}
+
+// console.log(this.videoOutputList);
+
+ }
 
  tipoCues(): void{
   this.tipoCue = [];

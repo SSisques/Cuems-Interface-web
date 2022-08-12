@@ -27,7 +27,7 @@ export class OscService {
     });
 
     in_message(mess: any) {
-    
+      
       if (mess.data instanceof ArrayBuffer) {
         let dataView = new DataView(mess.data);
         const msg = new OSC.Message();
