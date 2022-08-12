@@ -361,6 +361,7 @@ despligue_state = false;
           const options = {
             autoClose: true
           };
+          // this.alertService.clear();
           this.alertService.success('Proyecto guardado correctamente ', options);
          // alert( recibo.value ); // quizás cambiarlo por un mensaje en el interface
           // this.notify = false; // reseteamos la variable
